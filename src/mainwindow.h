@@ -40,6 +40,6 @@ namespace CtqTool
 
         static constexpr int numberOfRecentFiles = 10;
 
-	QList<QAction*> recentFileActions;
+        QList<QAction*> recentFileActions;
     };
 }

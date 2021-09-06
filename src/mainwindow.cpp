@@ -134,7 +134,7 @@ namespace CtqTool
 
         if (dialog.exec() == QDialog::Accepted)
         {
-	    // todo implement
+            // todo implement
         }
     }
 
@@ -146,8 +146,8 @@ namespace CtqTool
             return;
         }
 
-	// todo implement
-	
+        // todo implement
+        
         SetCurrentFile(filename);
     }
 
