@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+*/
 
 #include "item.h"
 
@@ -48,5 +48,58 @@ namespace CtqTool
     QString Item::GetNote() const
     {
        return note;
+    }
+    
+    TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem* parent)
+        : itemData(data), parentItem(parent)
+    {
+
+    }
+
+    TreeItem::~TreeItem()
+    {
+        qDeleteAll(childItems);
+    }
+    
+    void TreeItem::Append(TreeItem* item)
+    {
+        childItems.append(item);
+    }
+
+    TreeItem* TreeItem::GetChild(int row)
+    {
+        if (row < 0 || row >= childItems.size())
+            return nullptr;
+        return childItems.at(row);
+    }
+    
+    int TreeItem::ChildCount() const
+    {
+        return childItems.count();
+    }
+    
+    int TreeItem::ColumnCount() const
+    {
+        return itemData.count();
+    }
+    
+    QVariant TreeItem::Data(int column) const
+    {
+        if (column < 0 || column >= itemData.size())
+            return QVariant();
+        return itemData.at(column);
+    }
+
+    TreeItem* TreeItem::ParentItem()
+    {
+        return parentItem;
+    }
+
+    int TreeItem::Row() const
+    {
+        if (parentItem)
+            return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
+
+        return 0;
     }
 }

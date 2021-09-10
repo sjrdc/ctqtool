@@ -22,16 +22,22 @@ namespace CtqTool
 {
     void Driver::Add(std::shared_ptr<Ctq> ctq)
     {
-        ctqs.emplace_back(std::move(ctq));
+        ctqs.push_back(ctq);
     }
 
     std::shared_ptr<Ctq> Driver::GetCtq(size_t i) const
     {
+    assert(i < ctqs.size());
         return *std::next(ctqs.begin(), i);
     }
     
     size_t Driver::GetNrOfCtqs() const
     {
         return ctqs.size();
+    }
+
+    size_t Driver::GetBreadth() const
+    {
+    return GetNrOfCtqs();
     }
 }

@@ -32,7 +32,9 @@ namespace CtqTool
         void Add(std::shared_ptr<Driver>);
         std::shared_ptr<Driver> GetDriver(size_t i) const;
         size_t GetNrOfDrivers() const;
-        
+
+    size_t GetBreadth() const override;
+
     private:
         std::list<std::shared_ptr<Driver>> drivers;
 

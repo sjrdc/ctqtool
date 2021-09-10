@@ -16,27 +16,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#pragma once
-
-#include "item.h"
-
-#include <list>
-#include <memory>
+#include "ctqtree.h"
+#include "userneed.h"
 
 namespace CtqTool
 {
-    class Ctq;
-    
-    class Driver : public Item
+    void CtqTree::Add(UserNeed need)
     {
-    public:
-        void Add(std::shared_ptr<Ctq>);
-        std::shared_ptr<Ctq> GetCtq(size_t i) const;
-        size_t GetNrOfCtqs() const;
+        needs.emplace_back(std::move(need));
+    }
 
-    size_t GetBreadth() const override;
-
-    private:
-        std::list<std::shared_ptr<Ctq>> ctqs;
-    };
+    const UserNeed& CtqTree::GetNeed(size_t i) const
+    {
+    assert(i < needs.size());
+        return *std::next(needs.begin(), i);
+    }
+    
+    size_t CtqTree::GetNrOfNeeds() const
+    {
+        return needs.size();
+    }
 }

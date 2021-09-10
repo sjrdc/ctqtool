@@ -19,6 +19,9 @@
 #include "mainwindow.h"
 #include "utilities.h"
 
+#include "ctqtreescene.h"
+#include "datamodel/ctqmodel.h"
+
 #include <QtWidgets>
 
 #define _CTQ_VERSION_ "0.0.1"
@@ -35,18 +38,24 @@ namespace
 
 namespace CtqTool
 {
-    MainWindow::MainWindow()
+    MainWindow::MainWindow() :
+        scene(new CtqTreeScene(this))
     {
-        this->setAcceptDrops(true);
+        QFile file("default.txt");
+        file.open(QIODevice::ReadOnly);
+        auto* model = new CtqTool::CtqModel(file.readAll());
+        file.close();
+        
+        auto* treeView = new QTreeView(this);
+        treeView->setModel(model);
+
+        setCentralWidget(treeView);
+        setAcceptDrops(true);
 
         MakeMenus();
         MakeStatusBar();
 
         setUnifiedTitleAndToolBarOnMac(true);
-
-        constexpr auto defaultWidth = 1200;
-        constexpr auto defaultHeight = 800;
-        resize(defaultWidth, defaultHeight);
     }
 
     void MainWindow::About()

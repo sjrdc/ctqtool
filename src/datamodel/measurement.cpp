@@ -24,7 +24,7 @@ namespace CtqTool
     {
         return description;
     }
-
+    
     void Measurement::SetDescription(QString s)
     {
         description = std::move(s);

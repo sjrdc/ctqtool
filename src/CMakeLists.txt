@@ -8,6 +8,8 @@ add_executable(ctqtool
     main.cpp
     mainwindow.h
     mainwindow.cpp
+    ctqtreescene.h
+    ctqtreescene.cpp
     utilities.h
     utilities.cpp
     ${RESOURCES}

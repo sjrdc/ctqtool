@@ -22,7 +22,7 @@
 
 namespace CtqTool
 {
-    Q_DECL_EXPORT QString ExtractFilename(const QString &line);
+    Q_DECL_EXPORT QString ExtractFilename(const QString& line);
     Q_DECL_EXPORT QString ExtractMultiLineText(QStringList lines);
     Q_DECL_EXPORT QString CommonPrefix(const QString& a, const QString& b);
     Q_DECL_EXPORT bool FileExists(const QString &filename);

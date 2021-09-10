@@ -17,6 +17,9 @@
  */
 
 #include "userneed.h"
+#include "driver.h"
+
+#include <numeric>
 
 namespace CtqTool
 {
@@ -27,11 +30,21 @@ namespace CtqTool
 
     std::shared_ptr<Driver> UserNeed::GetDriver(size_t i) const
     {
+    assert(i < drivers.size());
         return *std::next(drivers.begin(), i);
     }
     
     size_t UserNeed::GetNrOfDrivers() const
     {
         return drivers.size();
+    }
+
+    size_t UserNeed::GetBreadth() const
+    {
+        return std::accumulate(drivers.cbegin(), drivers.cend(), 0ul,
+            [](size_t s, const std::shared_ptr<Driver>& driver)
+            {
+                return s + driver->GetBreadth();
+            });
     }
 }

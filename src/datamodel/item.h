@@ -19,6 +19,8 @@
 #pragma once
 
 #include <QString>
+#include <QVariant>
+#include <QVector>
 
 namespace CtqTool
 {
@@ -34,10 +36,31 @@ namespace CtqTool
         void SetNote(QString);
         QString GetNote() const;
 
+    virtual size_t GetBreadth() const = 0;
+
     private:
         unsigned short weight = 0;
         QString text;
         QString note;
     };
-}
+    
+    class TreeItem
+    {
+    public:
+        explicit TreeItem(const QVector<QVariant>& data, TreeItem* parentItem = nullptr);
+        ~TreeItem();
 
+        void Append(TreeItem *child);
+        TreeItem* GetChild(int row);
+        int ChildCount() const;
+        int ColumnCount() const;
+        QVariant Data(int column) const;
+        int Row() const;
+        TreeItem* ParentItem();
+
+    private:
+        QVector<TreeItem*> childItems;
+        QVector<QVariant> itemData;
+        TreeItem* parentItem;
+    };
+}

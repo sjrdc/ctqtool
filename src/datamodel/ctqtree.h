@@ -18,25 +18,21 @@
 
 #pragma once
 
-#include "item.h"
+#include "userneed.h"
 
 #include <list>
 #include <memory>
 
 namespace CtqTool
 {
-    class Ctq;
-    
-    class Driver : public Item
+    class CtqTree
     {
     public:
-        void Add(std::shared_ptr<Ctq>);
-        std::shared_ptr<Ctq> GetCtq(size_t i) const;
-        size_t GetNrOfCtqs() const;
-
-    size_t GetBreadth() const override;
-
+        void Add(UserNeed);
+        const UserNeed& GetNeed(size_t i) const;
+        size_t GetNrOfNeeds() const;
+        
     private:
-        std::list<std::shared_ptr<Ctq>> ctqs;
-    };
+        std::list<UserNeed> needs;
+    };    
 }

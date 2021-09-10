@@ -18,18 +18,15 @@
 
 #pragma once
 
-#include "item.h"
-#include "measurement.h"
+#include <QGraphicsScene>
 
 namespace CtqTool
 {
-    class Ctq : public Item
+    class CtqTree;
+    class CtqTreeScene : public QGraphicsScene
     {
     public:
-        Measurement& GetMeasurement();
-        const Measurement& GetMeasurement() const;
-    size_t GetBreadth() const override { return 1;}
-    private:
-        Measurement measurement;
+        CtqTreeScene(QObject* parent = nullptr);
+    void SetTree(const CtqTree&);
     };
 }

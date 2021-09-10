@@ -22,6 +22,7 @@
 
 namespace CtqTool
 {
+    class CtqTreeScene;
     class MainWindow : public QMainWindow
     {
         Q_OBJECT
@@ -59,5 +60,6 @@ namespace CtqTool
         static constexpr int numberOfRecentFiles = 10;
 
         QList<QAction*> recentFileActions;
+    CtqTreeScene* scene;
     };
 }
