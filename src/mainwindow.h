@@ -19,9 +19,13 @@
 #pragma once
 
 #include <QMainWindow>
+#include "datamodel/ctqmodel.h"
+
+class QTreeView;
 
 namespace CtqTool
 {
+
     class CtqTreeScene;
     class MainWindow : public QMainWindow
     {
@@ -60,6 +64,8 @@ namespace CtqTool
         static constexpr int numberOfRecentFiles = 10;
 
         QList<QAction*> recentFileActions;
-    CtqTreeScene* scene;
+        CtqTreeScene* scene;
+        QTreeView* treeView;
+        std::unique_ptr<CtqModel> model;
     };
 }

@@ -17,9 +17,11 @@
  */
 
 #include "mainwindow.h"
-#include "utilities.h"
 
 #include "ctqtreescene.h"
+#include "itemdialog.h"
+#include "utilities.h"
+
 #include "datamodel/ctqmodel.h"
 
 #include <QtWidgets>
@@ -39,15 +41,16 @@ namespace
 namespace CtqTool
 {
     MainWindow::MainWindow() :
-        scene(new CtqTreeScene(this))
+        scene(new CtqTreeScene(this)),
+        treeView(new QTreeView(this))
     {
         QFile file("default.txt");
         file.open(QIODevice::ReadOnly);
-        auto* model = new CtqTool::CtqModel(file.readAll());
+        model = std::make_unique<CtqTool::CtqModel>(file.readAll());
+        
         file.close();
         
-        auto* treeView = new QTreeView(this);
-        treeView->setModel(model);
+        treeView->setModel(model.get());
 
         setCentralWidget(treeView);
         setAcceptDrops(true);
@@ -260,6 +263,16 @@ namespace CtqTool
     {
         switch (e->key())
         {
+        case Qt::Key_F6:
+        {
+            const auto indices = treeView->selectionModel()->selectedIndexes();
+            if (indices.size() > 0) 
+            {
+                auto* dialog = new ItemDialog(model.get(), indices.at(0));
+                dialog->show();
+            }
+            break;
+        }
         default:
             e->ignore();
             break;

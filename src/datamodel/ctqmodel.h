@@ -27,7 +27,6 @@ namespace CtqTool
     class CtqModel : public QAbstractItemModel
     {
     Q_OBJECT
-
     public:
         explicit CtqModel(const QString& data, QObject* parent = nullptr);
         ~CtqModel();
@@ -41,7 +40,8 @@ namespace CtqTool
         QModelIndex parent(const QModelIndex& index) const override;
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
-
+        bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+        
     private:
         void setupModelData(const QStringList& lines, TreeItem& parent);
         std::unique_ptr<TreeItem> rootItem;

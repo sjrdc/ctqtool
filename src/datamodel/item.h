@@ -56,7 +56,9 @@ namespace CtqTool
         int ChildCount() const;
         int ColumnCount() const;
         QVariant Data(int column) const;
+        void SetData(int column, QVariant);
         int Row() const;
+        void Move(TreeItem* newParent);
         TreeItem* GetParent() const;
         TreeItem* GetParent();
 

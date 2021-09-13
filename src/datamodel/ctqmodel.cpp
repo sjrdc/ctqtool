@@ -157,4 +157,18 @@ namespace CtqTool
             ++number;
         }
     }
+
+    bool CtqModel::setData(const QModelIndex& index, const QVariant &value, int role)
+    {
+        if (index.isValid())
+        {
+            static_cast<TreeItem*>(index.internalPointer())->SetData(index.column(), value);
+            dataChanged(index, index);            
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

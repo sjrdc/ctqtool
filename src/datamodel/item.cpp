@@ -110,4 +110,9 @@ namespace CtqTool
         }
         return 0;
     }
+
+    void TreeItem::SetData(int col, QVariant d)
+    {
+        data.at(col) = d;
+    }
 }
