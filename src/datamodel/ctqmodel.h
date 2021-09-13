@@ -18,12 +18,12 @@
 
 #pragma once
 
-#include "ctqtree.h"
-
 #include <QAbstractItemModel>
+#include <memory>
 
 namespace CtqTool
 {
+    class TreeItem;
     class CtqModel : public QAbstractItemModel
     {
     Q_OBJECT
@@ -43,7 +43,7 @@ namespace CtqTool
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
 
     private:
-        void setupModelData(const QStringList& lines, TreeItem *parent);
-        TreeItem* rootItem = nullptr;
+        void setupModelData(const QStringList& lines, TreeItem& parent);
+        std::unique_ptr<TreeItem> rootItem;
     };    
 }

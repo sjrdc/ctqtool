@@ -20,7 +20,9 @@
 
 #include <QString>
 #include <QVariant>
-#include <QVector>
+
+#include <memory>
+#include <vector>
 
 namespace CtqTool
 {
@@ -36,7 +38,7 @@ namespace CtqTool
         void SetNote(QString);
         QString GetNote() const;
 
-    virtual size_t GetBreadth() const = 0;
+        virtual size_t GetBreadth() const = 0;
 
     private:
         unsigned short weight = 0;
@@ -47,20 +49,20 @@ namespace CtqTool
     class TreeItem
     {
     public:
-        explicit TreeItem(const QVector<QVariant>& data, TreeItem* parentItem = nullptr);
-        ~TreeItem();
+        explicit TreeItem(const std::vector<QVariant>& data, TreeItem* parentItem = nullptr);
 
-        void Append(TreeItem *child);
-        TreeItem* GetChild(int row);
+        void Append(std::shared_ptr<TreeItem> child);
+        const std::shared_ptr<TreeItem>& GetChild(int row);
         int ChildCount() const;
         int ColumnCount() const;
         QVariant Data(int column) const;
         int Row() const;
-        TreeItem* ParentItem();
+        TreeItem* GetParent() const;
+        TreeItem* GetParent();
 
     private:
-        QVector<TreeItem*> childItems;
-        QVector<QVariant> itemData;
+        std::vector<std::shared_ptr<TreeItem>> children;
+        std::vector<QVariant> data;
         TreeItem* parentItem;
     };
 }

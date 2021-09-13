@@ -50,47 +50,49 @@ namespace CtqTool
        return note;
     }
     
-    TreeItem::TreeItem(const QVector<QVariant> &data, TreeItem* parent)
-        : itemData(data), parentItem(parent)
+    TreeItem::TreeItem(const std::vector<QVariant>& data, TreeItem* parent) :
+        data(data), 
+        parentItem(parent)
     {
-
     }
 
-    TreeItem::~TreeItem()
+    void TreeItem::Append(std::shared_ptr<TreeItem> item)
     {
-        qDeleteAll(childItems);
-    }
-    
-    void TreeItem::Append(TreeItem* item)
-    {
-        childItems.append(item);
+        children.push_back(std::move(item));
     }
 
-    TreeItem* TreeItem::GetChild(int row)
+    const std::shared_ptr<TreeItem>& TreeItem::GetChild(int row)
     {
-        if (row < 0 || row >= childItems.size())
-            return nullptr;
-        return childItems.at(row);
+        if (row < 0 || row >= children.size())
+        {
+            throw std::runtime_error("wrong index");
+        }
+        return children.at(row);
     }
     
     int TreeItem::ChildCount() const
     {
-        return childItems.count();
+        return static_cast<int>(children.size());
     }
     
     int TreeItem::ColumnCount() const
     {
-        return itemData.count();
+        return static_cast<int>(data.size());
     }
     
     QVariant TreeItem::Data(int column) const
     {
-        if (column < 0 || column >= itemData.size())
+        if (column < 0 || column >= data.size())
             return QVariant();
-        return itemData.at(column);
+        return data.at(column);
     }
 
-    TreeItem* TreeItem::ParentItem()
+    TreeItem* TreeItem::GetParent() const
+    {
+        return parentItem;
+    }
+
+    TreeItem* TreeItem::GetParent()
     {
         return parentItem;
     }
@@ -98,8 +100,14 @@ namespace CtqTool
     int TreeItem::Row() const
     {
         if (parentItem)
-            return parentItem->childItems.indexOf(const_cast<TreeItem*>(this));
-
+        {
+            const auto it = std::find_if(parentItem->children.cbegin(), parentItem->children.cend(), 
+            [this](const auto& item) 
+            {
+                return item->Data(0) == this->Data(0);
+            });
+            return std::distance(parentItem->children.cbegin(), it);
+        }
         return 0;
     }
 }

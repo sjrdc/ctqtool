@@ -28,7 +28,7 @@ namespace CtqTool
 
     const UserNeed& CtqTree::GetNeed(size_t i) const
     {
-    assert(i < needs.size());
+        assert(i < needs.size());
         return *std::next(needs.begin(), i);
     }
     
