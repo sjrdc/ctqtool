@@ -25,6 +25,7 @@ namespace CtqTool
     TreeView::TreeView(QWidget* parent) :
         QTreeView(parent)
     {
+        setUniformRowHeights(false);
     }
 
     void TreeView::mouseDoubleClickEvent(QMouseEvent *event)

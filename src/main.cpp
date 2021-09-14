@@ -18,9 +18,9 @@
 
 #include "mainwindow.h"
 
-#include <QtWidgets/QApplication>
 #include <QFile>
 #include <QTextStream>
+#include <QtWidgets/QApplication>
 
 int main(int argc, char* argv[])
 {

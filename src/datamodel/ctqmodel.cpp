@@ -29,7 +29,7 @@ namespace CtqTool
         if (!index.isValid())
             return QVariant();
 
-        if (role != Qt::DisplayRole)
+        if (role != Qt::DisplayRole && role != Qt::EditRole)
             return QVariant();
 
         TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
@@ -42,7 +42,7 @@ namespace CtqTool
         if (!index.isValid())
             return Qt::NoItemFlags;
 
-        return QAbstractItemModel::flags(index);
+        return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
     }
     
     QVariant CtqModel::headerData(int section, Qt::Orientation orientation,
