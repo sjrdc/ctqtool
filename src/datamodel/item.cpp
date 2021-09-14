@@ -115,4 +115,29 @@ namespace CtqTool
     {
         data.at(col) = d;
     }
+
+    bool TreeItem::InsertChildren(int position, int count, int columns)
+    {
+        if (position < 0 || position > children.size())
+            return false;
+
+        for (int row = 0; row < count; ++row) {
+            std::vector<QVariant> data(columns);
+            auto item = std::make_shared<TreeItem>(data, this);
+            children.insert(children.begin() + position, item);
+        }
+
+        return true;
+    }
+    
+    bool TreeItem::RemoveChildren(int position, int count)
+    {
+        if (position < 0 || position + count > children.size())
+            return false;
+
+        for (int row = 0; row < count; ++row)
+            children.erase(children.begin() + position);
+
+        return true;
+    }
 }

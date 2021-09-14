@@ -12,7 +12,7 @@ namespace CtqTool
         QAbstractItemModel(parent),
         rootItem(std::make_unique<TreeItem>(std::vector<QVariant>({tr("Title"), tr("Note")}), nullptr))
     {
-        setupModelData(data.split('\n'), *rootItem);
+        SetupModelData(data.split('\n'), *rootItem);
     }
 
     CtqModel::~CtqModel() = default;
@@ -98,7 +98,7 @@ namespace CtqTool
         return parentItem->ChildCount();
     }
     
-    void CtqModel::setupModelData(const QStringList& lines, TreeItem& parent)
+    void CtqModel::SetupModelData(const QStringList& lines, TreeItem& parent)
     {
         std::vector<TreeItem*> parents;
         QVector<int> indentations;        
@@ -169,5 +169,44 @@ namespace CtqTool
         {
             return false;
         }
+    }
+
+    TreeItem* CtqModel::GetItem(const QModelIndex &index) const
+    {
+        if (index.isValid()) 
+        {
+            TreeItem *item = static_cast<TreeItem*>(index.internalPointer());
+            if (item)
+                return item;
+        }
+        return rootItem.get();
+    }
+
+    bool CtqModel::insertRows(int position, int rows, const QModelIndex &parent)
+    {
+        auto* parentItem = GetItem(parent);
+        if (!parentItem)
+            return false;
+
+        beginInsertRows(parent, position, position + rows - 1);
+        const auto success = parentItem->InsertChildren(position,
+                                                        rows,
+                                                        rootItem->ColumnCount());
+        endInsertRows();
+
+        return success;
+    }
+
+    bool CtqModel::removeRows(int position, int rows, const QModelIndex &parent)
+    {
+        TreeItem *parentItem = GetItem(parent);
+        if (!parentItem)
+            return false;
+
+        beginRemoveRows(parent, position, position + rows - 1);
+        const bool success = parentItem->RemoveChildren(position, rows);
+        endRemoveRows();
+
+        return success;
     }
 }

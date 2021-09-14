@@ -53,6 +53,9 @@ namespace CtqTool
         
         treeView->setModel(model.get());
 
+        for (int column = 0; column < model->columnCount(); ++column)
+            treeView->resizeColumnToContents(column);
+            
         setCentralWidget(treeView);
         setAcceptDrops(true);
 
@@ -96,6 +99,18 @@ namespace CtqTool
     void MainWindow::MakeEditMenu()
     {
         auto* editMenu = menuBar()->addMenu(tr("&Edit"));
+
+        auto* insertRowAction = MakeAction(tr("Insert row"), this, QKeySequence(Qt::CTRL + Qt::Key_I, Qt::Key_R));
+        connect(insertRowAction, &QAction::triggered, this, &MainWindow::InsertRow);
+        editMenu->addAction(insertRowAction);
+
+        auto* insertChildAction = MakeAction(tr("Insert child"), this, QKeySequence(Qt::CTRL + Qt::Key_I, Qt::Key_C));
+        connect(insertChildAction, &QAction::triggered, this, &MainWindow::InsertChild);
+        editMenu->addAction(insertChildAction);
+
+        auto* removeRowAction = MakeAction(tr("Remove row"), this, QKeySequence::Delete);
+        connect(removeRowAction, &QAction::triggered, this, &MainWindow::RemoveRow);
+        editMenu->addAction(removeRowAction);
     }
 
     void MainWindow::SetClipBoard(const QString& text)
@@ -287,5 +302,74 @@ namespace CtqTool
 
     void MainWindow::OnReloadTriggered()
     {
+    }
+
+    void MainWindow::UpdateActions()
+    {
+        const auto hasSelection = !treeView->selectionModel()->selection().isEmpty();
+        const auto hasCurrent = treeView->selectionModel()->currentIndex().isValid();
+        if (hasCurrent) 
+        {
+            treeView->closePersistentEditor(treeView->selectionModel()->currentIndex());
+
+            const auto row = treeView->selectionModel()->currentIndex().row();
+            const auto column = treeView->selectionModel()->currentIndex().column();
+            if (treeView->selectionModel()->currentIndex().parent().isValid())
+                statusBar()->showMessage(tr("Position: (%1,%2)").arg(row).arg(column));
+            else
+                statusBar()->showMessage(tr("Position: (%1,%2) in top level").arg(row).arg(column));
+        }
+    }
+
+    void MainWindow::InsertRow()
+    {
+        const auto index = treeView->selectionModel()->currentIndex();
+        auto* model = treeView->model();
+
+        if (!model->insertRow(index.row()+1, index.parent()))
+            return;
+
+        UpdateActions();
+
+        for (int column = 0; column < model->columnCount(index.parent()); ++column) 
+        {
+            const QModelIndex child = model->index(index.row() + 1, column, index.parent());
+            model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
+        }
+    }
+
+    void MainWindow::RemoveRow()
+    {
+        const auto index = treeView->selectionModel()->currentIndex();
+        auto* model = treeView->model();
+        if (model->removeRow(index.row(), index.parent()))
+            UpdateActions();
+    }
+        
+    void MainWindow::InsertChild()
+    {
+        const auto index = treeView->selectionModel()->currentIndex();
+        auto *model = treeView->model();
+
+        if (model->columnCount(index) == 0) 
+        {
+            if (!model->insertColumn(0, index))
+                return;
+        }
+
+        if (!model->insertRow(0, index))
+            return;
+
+        for (int column = 0; column < model->columnCount(index); ++column) 
+        {
+            const QModelIndex child = model->index(0, column, index);
+            model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
+            if (!model->headerData(column, Qt::Horizontal).isValid())
+                model->setHeaderData(column, Qt::Horizontal, QVariant(tr("[No header]")), Qt::EditRole);
+        }
+
+        treeView->selectionModel()->setCurrentIndex(model->index(0, 0, index),
+                                                QItemSelectionModel::ClearAndSelect);
+        UpdateActions();
     }
 }

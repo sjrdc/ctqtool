@@ -58,6 +58,11 @@ namespace CtqTool
         void ShowMarkupFilters();
         void UpdateRecentFileActions();
         static void SetClipBoard(const QString&);
+        void UpdateActions();
+
+        void InsertChild();
+        void InsertRow();
+        void RemoveRow();
 
         static constexpr int numberOfRecentFiles = 10;
 

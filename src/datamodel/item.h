@@ -52,13 +52,14 @@ namespace CtqTool
         explicit TreeItem(const std::vector<QVariant>& data, TreeItem* parentItem = nullptr);
 
         void Append(std::shared_ptr<TreeItem> child);
+        bool InsertChildren(int position, int count, int columns);
+        bool RemoveChildren(int position, int count);
         const std::shared_ptr<TreeItem>& GetChild(int row);
         int ChildCount() const;
         int ColumnCount() const;
         QVariant Data(int column) const;
         void SetData(int column, QVariant);
         int Row() const;
-        void Move(TreeItem* newParent);
         TreeItem* GetParent() const;
         TreeItem* GetParent();
 

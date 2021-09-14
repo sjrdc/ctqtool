@@ -41,9 +41,21 @@ namespace CtqTool
         int rowCount(const QModelIndex& parent = QModelIndex()) const override;
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
         bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
+          
+       
+        /* bool removeColumns(int position, int columns,
+                       const QModelIndex &parent = QModelIndex()) override;
+        bool insertColumns(int position, int columns,
+                       const QModelIndex &parent = QModelIndex()) override;*/
+        bool removeRows(int position, int rows,
+                    const QModelIndex &parent = QModelIndex()) override; 
+        bool insertRows(int position, int rows,
+                    const QModelIndex &parent = QModelIndex()) override;
         
     private:
-        void setupModelData(const QStringList& lines, TreeItem& parent);
+        void SetupModelData(const QStringList& lines, TreeItem& parent);
+        TreeItem* GetItem(const QModelIndex &index) const;
+
         std::unique_ptr<TreeItem> rootItem;
     };    
 }
