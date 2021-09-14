@@ -17,8 +17,8 @@
  */
 
 #include "itemdialog.h"
-#include "datamodel/ctqmodel.h"
 
+#include <QAbstractItemModel>
 #include <QCheckBox>
 #include <QColorDialog>
 #include <QDialogButtonBox>
@@ -29,7 +29,7 @@
 
 namespace CtqTool
 {
-    ItemDialog::ItemDialog(CtqModel* m, QModelIndex i, QWidget* parent, Qt::WindowFlags flags) :
+    ItemDialog::ItemDialog(QAbstractItemModel* m, QModelIndex i, QWidget* parent, Qt::WindowFlags flags) :
         QDialog(parent, flags),
         model(m),
         index(i),

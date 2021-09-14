@@ -20,6 +20,7 @@
 
 #include "ctqtreescene.h"
 #include "itemdialog.h"
+#include "treeview.h"
 #include "utilities.h"
 
 #include "datamodel/ctqmodel.h"
@@ -42,7 +43,7 @@ namespace CtqTool
 {
     MainWindow::MainWindow() :
         scene(new CtqTreeScene(this)),
-        treeView(new QTreeView(this))
+        treeView(new TreeView(this))
     {
         QFile file("default.txt");
         file.open(QIODevice::ReadOnly);

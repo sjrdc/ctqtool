@@ -21,12 +21,10 @@
 #include <QMainWindow>
 #include "datamodel/ctqmodel.h"
 
-class QTreeView;
-
 namespace CtqTool
 {
-
     class CtqTreeScene;
+    class TreeView;
     class MainWindow : public QMainWindow
     {
         Q_OBJECT
@@ -65,7 +63,7 @@ namespace CtqTool
 
         QList<QAction*> recentFileActions;
         CtqTreeScene* scene;
-        QTreeView* treeView;
+        TreeView* treeView;
         std::unique_ptr<CtqModel> model;
     };
 }

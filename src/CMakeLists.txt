@@ -12,6 +12,8 @@ add_executable(ctqtool
     main.cpp
     mainwindow.h
     mainwindow.cpp
+    treeview.h
+    treeview.cpp
     utilities.h
     utilities.cpp
     ${RESOURCES}

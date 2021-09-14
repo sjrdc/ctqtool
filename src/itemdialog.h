@@ -21,6 +21,7 @@
 #include <QDialog>
 #include <QModelIndex>
 
+class QAbstractItemModel;
 class QCheckBox;
 class QDialogButtonBox;
 class QListWidget;
@@ -30,15 +31,12 @@ class QListWidgetItem;
 
 namespace CtqTool
 {
-    class CtqModel;
-    class FilterWidget;
-
     class ItemDialog : public QDialog
     {
         Q_OBJECT
 
     public:
-        ItemDialog(CtqModel*, QModelIndex, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+        ItemDialog(QAbstractItemModel*, QModelIndex, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
         virtual ~ItemDialog();
 
     private:
@@ -56,15 +54,11 @@ namespace CtqTool
         void SetPropertiesFromFilter(QModelIndex index);
 
         static void SetButtonColor(QPushButton* b, const QColor& c);
-        CtqModel* model = nullptr;
+        
+        QAbstractItemModel* model = nullptr;
         QModelIndex index;
-
-        QListWidget* listView = nullptr;
         QDialogButtonBox* buttonBox = nullptr;
-        QPushButton* plusButton = nullptr;
-        QPushButton* minusButton = nullptr;
         QLineEdit* titleEdit = nullptr;
         QLineEdit* noteEdit = nullptr;
-        QCheckBox* activeCheckbox = nullptr;
     };
 }

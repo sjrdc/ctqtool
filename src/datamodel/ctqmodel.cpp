@@ -12,7 +12,6 @@ namespace CtqTool
         QAbstractItemModel(parent),
         rootItem(std::make_unique<TreeItem>(std::vector<QVariant>({tr("Title"), tr("Note")}), nullptr))
     {
-        
         setupModelData(data.split('\n'), *rootItem);
     }
 
