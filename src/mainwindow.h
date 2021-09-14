@@ -61,7 +61,9 @@ namespace CtqTool
         void UpdateActions();
 
         void InsertChild();
+        void InsertExistingChild();
         void InsertRow();
+        void InsertExistingRow();
         void RemoveRow();
 
         static constexpr int numberOfRecentFiles = 10;

@@ -104,9 +104,17 @@ namespace CtqTool
         connect(insertRowAction, &QAction::triggered, this, &MainWindow::InsertRow);
         editMenu->addAction(insertRowAction);
 
+        auto* insertExistingRowAction = MakeAction(tr("Insert existing row"), this, QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I, Qt::Key_R));
+        connect(insertExistingRowAction, &QAction::triggered, this, &MainWindow::InsertExistingRow);
+        editMenu->addAction(insertExistingRowAction);
+
         auto* insertChildAction = MakeAction(tr("Insert child"), this, QKeySequence(Qt::CTRL + Qt::Key_I, Qt::Key_C));
         connect(insertChildAction, &QAction::triggered, this, &MainWindow::InsertChild);
         editMenu->addAction(insertChildAction);
+
+        auto* insertExistingChildAction = MakeAction(tr("Insert existing child"), this, QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I, Qt::Key_C));
+        connect(insertExistingChildAction, &QAction::triggered, this, &MainWindow::InsertExistingChild);
+        editMenu->addAction(insertExistingChildAction);
 
         auto* removeRowAction = MakeAction(tr("Remove row"), this, QKeySequence::Delete);
         connect(removeRowAction, &QAction::triggered, this, &MainWindow::RemoveRow);
@@ -333,7 +341,24 @@ namespace CtqTool
 
         for (int column = 0; column < model->columnCount(index.parent()); ++column) 
         {
-            const QModelIndex child = model->index(index.row() + 1, column, index.parent());
+            const auto child = model->index(index.row() + 1, column, index.parent());
+            model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
+        }
+    }
+
+    void MainWindow::InsertExistingRow()
+    {
+        const auto index = treeView->selectionModel()->currentIndex();
+        auto* model = treeView->model();
+
+        if (!model->insertRow(index.row()+1, index.parent()))
+            return;
+
+        UpdateActions();
+
+        for (int column = 0; column < model->columnCount(index.parent()); ++column) 
+        {
+            const auto child = model->index(index.row() + 1, column, index.parent());
             model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
         }
     }
@@ -362,10 +387,41 @@ namespace CtqTool
 
         for (int column = 0; column < model->columnCount(index); ++column) 
         {
-            const QModelIndex child = model->index(0, column, index);
+            const auto child = model->index(0, column, index);
             model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
             if (!model->headerData(column, Qt::Horizontal).isValid())
+            {
                 model->setHeaderData(column, Qt::Horizontal, QVariant(tr("[No header]")), Qt::EditRole);
+            }
+        }
+
+        treeView->selectionModel()->setCurrentIndex(model->index(0, 0, index),
+                                                QItemSelectionModel::ClearAndSelect);
+        UpdateActions();
+    }
+
+    void MainWindow::InsertExistingChild()
+    {
+        const auto index = treeView->selectionModel()->currentIndex();
+        auto *model = treeView->model();
+
+        if (model->columnCount(index) == 0) 
+        {
+            if (!model->insertColumn(0, index))
+                return;
+        }
+
+        if (!model->insertRow(0, index))
+            return;
+
+        for (int column = 0; column < model->columnCount(index); ++column) 
+        {
+            const auto child = model->index(0, column, index);
+            model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
+            if (!model->headerData(column, Qt::Horizontal).isValid())
+            {
+                model->setHeaderData(column, Qt::Horizontal, QVariant(tr("[No header]")), Qt::EditRole);
+            }
         }
 
         treeView->selectionModel()->setCurrentIndex(model->index(0, 0, index),
