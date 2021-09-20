@@ -6,6 +6,7 @@ add_library(datamodel
   ctq.cpp
   ctqtree.cpp
   ctqmodel.cpp
+  ctqproxymodel.cpp
   driver.cpp
   item.cpp
   measurement.cpp
