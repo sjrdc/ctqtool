@@ -214,8 +214,9 @@ namespace CtqTool
     class CtqProxyModel::CtqProxyModelImpl 
     {
     public:
-        CtqProxyModelImpl(CtqProxyModel* p) :
-            instance(p)
+        CtqProxyModelImpl(int offset, CtqProxyModel* p) :
+            instance(p),
+            offset(offset)
         {
         }
          
@@ -261,12 +262,13 @@ namespace CtqTool
         bool aboutToRemoveRoots;
 
     private:
-        CtqProxyModel* instance;   
+        CtqProxyModel* instance;
+        int offset = 0;
     };
 
-    CtqProxyModel::CtqProxyModel(QObject* parent) : 
+    CtqProxyModel::CtqProxyModel(int offset, QObject* parent) : 
         QAbstractProxyModel(parent),
-        impl(std::make_unique<CtqProxyModelImpl>(this))
+        impl(std::make_unique<CtqProxyModelImpl>(offset, this))
     {
     }
 

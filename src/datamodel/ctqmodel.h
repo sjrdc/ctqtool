@@ -63,7 +63,7 @@ namespace CtqTool
     class CtqProxyModel : public QAbstractProxyModel {
     Q_OBJECT
     public:
-        CtqProxyModel(QObject *);
+        CtqProxyModel(int offset, QObject* parent = nullptr);
         virtual ~CtqProxyModel();
 
         virtual void setSourceModel(QAbstractItemModel *);
