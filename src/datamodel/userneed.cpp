@@ -38,13 +38,4 @@ namespace CtqTool
     {
         return drivers.size();
     }
-
-    size_t UserNeed::GetBreadth() const
-    {
-        return std::accumulate(drivers.cbegin(), drivers.cend(), 0ul,
-            [](size_t s, const std::shared_ptr<Driver>& driver)
-            {
-                return s + driver->GetBreadth();
-            });
-    }
 }

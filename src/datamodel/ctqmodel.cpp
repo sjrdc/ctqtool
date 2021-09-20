@@ -11,7 +11,7 @@ namespace CtqTool
  
     CtqModel::CtqModel(const QString& data, QObject* parent) :
         QAbstractItemModel(parent),
-        rootItem(std::make_unique<TreeItem>(std::vector<QVariant>({tr("Title"), tr("Note")}), nullptr))
+        rootItem(std::make_unique<TreeItem>(std::make_shared<Item>("Title", "Note"), nullptr))
     {
         SetupModelData(data.split('\n'), *rootItem);
     }
@@ -123,7 +123,7 @@ namespace CtqTool
             {
                 // Read the column data from the rest of the line.
                 const QStringList columnStrings =lineData.split(QLatin1Char('\t'), Qt::SkipEmptyParts);
-                std::vector<QVariant> columnData;
+                std::vector<QString> columnData;
                 columnData.reserve(columnStrings.count());
 
                 for (const auto& columnString : columnStrings)
@@ -152,7 +152,7 @@ namespace CtqTool
                 }
 
                 // Append a new item to the current parent's list of children.
-                parents.back()->Append(std::make_unique<TreeItem>(columnData, parents.back()));
+                parents.back()->Append(std::make_unique<TreeItem>(std::make_shared<Item>(columnData[0], columnData[1]), parents.back()));
             }
             ++number;
         }
@@ -162,7 +162,7 @@ namespace CtqTool
     {
         if (index.isValid())
         {
-            static_cast<TreeItem*>(index.internalPointer())->SetData(index.column(), value);
+            static_cast<TreeItem*>(index.internalPointer())->SetData(index.column(), value.toString());
             dataChanged(index, index);            
             return true;
         }

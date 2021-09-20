@@ -34,8 +34,6 @@ namespace CtqTool
         std::shared_ptr<Ctq> GetCtq(size_t i) const;
         size_t GetNrOfCtqs() const;
 
-    size_t GetBreadth() const override;
-
     private:
         std::list<std::shared_ptr<Ctq>> ctqs;
     };

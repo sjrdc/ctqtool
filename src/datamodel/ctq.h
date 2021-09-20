@@ -28,7 +28,7 @@ namespace CtqTool
     public:
         Measurement& GetMeasurement();
         const Measurement& GetMeasurement() const;
-    size_t GetBreadth() const override { return 1;}
+        
     private:
         Measurement measurement;
     };

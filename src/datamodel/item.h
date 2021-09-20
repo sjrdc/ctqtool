@@ -29,6 +29,8 @@ namespace CtqTool
     class Item
     {
     public:
+        Item(QString, QString);
+        
         void SetWeight(unsigned short);
         unsigned short GetWeight() const;
 
@@ -37,8 +39,6 @@ namespace CtqTool
 
         void SetNote(QString);
         QString GetNote() const;
-
-        virtual size_t GetBreadth() const = 0;
 
     private:
         unsigned short weight = 0;
@@ -49,7 +49,7 @@ namespace CtqTool
     class TreeItem
     {
     public:
-        explicit TreeItem(const std::vector<QVariant>& data, TreeItem* parentItem = nullptr);
+        explicit TreeItem(std::shared_ptr<Item> data, TreeItem* parentItem = nullptr);
 
         void Append(std::shared_ptr<TreeItem> child);
         bool InsertChildren(int position, int count, int columns);
@@ -57,15 +57,15 @@ namespace CtqTool
         const std::shared_ptr<TreeItem>& GetChild(int row);
         int ChildCount() const;
         int ColumnCount() const;
-        QVariant Data(int column) const;
-        void SetData(int column, QVariant);
+        QString Data(int column) const;
+        void SetData(int column, const QString&);
         int Row() const;
         TreeItem* GetParent() const;
         TreeItem* GetParent();
 
     private:
         std::vector<std::shared_ptr<TreeItem>> children;
-        std::vector<QVariant> data;
+        std::shared_ptr<Item> data;
         TreeItem* parentItem;
     };
 }

@@ -20,6 +20,12 @@
 
 namespace CtqTool
 {
+    Item::Item(QString text, QString note) :
+        text(text),
+        note(note)
+    {
+    }
+
     void Item::SetWeight(unsigned short w)
     {
         weight = w;
@@ -49,9 +55,9 @@ namespace CtqTool
     {
        return note;
     }
-    
-    TreeItem::TreeItem(const std::vector<QVariant>& data, TreeItem* parent) :
-        data(data), 
+
+    TreeItem::TreeItem(std::shared_ptr<Item> data, TreeItem* parent) :
+        data(std::move(data)), 
         parentItem(parent)
     {
     }
@@ -77,14 +83,22 @@ namespace CtqTool
     
     int TreeItem::ColumnCount() const
     {
-        return static_cast<int>(data.size());
+        return 2;
     }
     
-    QVariant TreeItem::Data(int column) const
+    QString TreeItem::Data(int column) const
     {
-        if (column < 0 || column >= data.size())
-            return QVariant();
-        return data.at(column);
+        if (column < 0 || column >= ColumnCount() || data == nullptr)
+        {
+            return QString();
+        }
+
+        if (column == 0)
+            return data->GetText();
+        else if (column == 1)
+            return data->GetNote();
+        else
+            return QString();
     }
 
     TreeItem* TreeItem::GetParent() const
@@ -111,9 +125,19 @@ namespace CtqTool
         return 0;
     }
 
-    void TreeItem::SetData(int col, QVariant d)
+    void TreeItem::SetData(int col, const QString& d)
     {
-        data.at(col) = d;
+        if (data != nullptr)
+        {
+            if (col == 0)
+            {
+                data->SetText(d);
+            }
+            else if (col == 1)
+            {
+                data->SetNote(d);
+            }
+        }
     }
 
     bool TreeItem::InsertChildren(int position, int count, int columns)
@@ -121,9 +145,10 @@ namespace CtqTool
         if (position < 0 || position > children.size())
             return false;
 
-        for (int row = 0; row < count; ++row) {
-            std::vector<QVariant> data(columns);
-            auto item = std::make_shared<TreeItem>(data, this);
+        for (int row = 0; row < count; ++row) 
+        {
+            std::vector<QString> data(columns);
+            auto item = std::make_shared<TreeItem>(std::make_shared<Item>(data[0], data[1]), this);
             children.insert(children.begin() + position, item);
         }
 

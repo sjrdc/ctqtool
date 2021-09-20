@@ -35,9 +35,4 @@ namespace CtqTool
     {
         return ctqs.size();
     }
-
-    size_t Driver::GetBreadth() const
-    {
-    return GetNrOfCtqs();
-    }
 }
