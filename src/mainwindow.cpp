@@ -63,6 +63,9 @@ namespace CtqTool
         MakeStatusBar();
 
         setUnifiedTitleAndToolBarOnMac(true);
+        constexpr auto height = 700;
+        constexpr auto width = 1100;
+        resize(width, height);
     }
 
     void MainWindow::About()
