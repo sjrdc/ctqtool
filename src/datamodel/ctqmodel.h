@@ -19,6 +19,7 @@
 #pragma once
 
 #include <QAbstractItemModel>
+#include <QAbstractProxyModel>
 #include <memory>
 
 namespace CtqTool
@@ -57,5 +58,35 @@ namespace CtqTool
         TreeItem* GetItem(const QModelIndex &index) const;
 
         std::unique_ptr<TreeItem> rootItem;
-    };    
+    };
+
+    class CtqProxyModel : public QAbstractProxyModel {
+    Q_OBJECT
+    public:
+        CtqProxyModel(QObject *);
+        virtual ~CtqProxyModel();
+
+        virtual void setSourceModel(QAbstractItemModel *);
+
+        virtual QModelIndex mapFromSource(const QModelIndex &) const;
+        virtual QModelIndex mapToSource(const QModelIndex &) const;
+
+        virtual QModelIndex	parent(const QModelIndex &) const;
+        virtual QModelIndex index(int, int, const QModelIndex & p = QModelIndex()) const;
+        
+        virtual int	rowCount(const QModelIndex & p = QModelIndex()) const;
+        virtual int	columnCount(const QModelIndex & p = QModelIndex()) const;
+
+    private slots:
+        void SourceRowsAboutToBeInserted(QModelIndex, int, int);
+        void SourceRowsAboutToBeRemoved(QModelIndex, int, int);
+        void SourceRowsInserted(QModelIndex, int, int);
+        void SourceRowsRemoved(QModelIndex, int, int);
+        void SourceDataChanged(QModelIndex, QModelIndex);
+        void SourceModelReset();
+
+    private:
+        class CtqProxyModelImpl;
+        std::unique_ptr<CtqProxyModelImpl> impl;
+    };
 }
