@@ -27,19 +27,19 @@ namespace CtqTool
             instance(p),
             offset(offset)
         {
-        }
-         
+        }         
 
         int SourceRootToCount(int row) 
         {
             if (!instance->sourceModel())
+            {
                 return 0;
+            }   
 
             if (!sourceRootsCounts.contains(row))
             {
                 sourceRootsCounts[row] = instance->sourceModel()->rowCount(
-                    instance->sourceModel()->index(row,0)
-                );
+                    instance->sourceModel()->index(row,0));
             }
 
             return sourceRootsCounts[row];
@@ -47,20 +47,22 @@ namespace CtqTool
 
         int RowFrom(int root, int row)
         {
-            for (int r = 0; r< root; r++)
-            row += SourceRootToCount(r);
+            for (auto r = 0; r < root; r++)
+            {
+                row += SourceRootToCount(r);
+            }
             return row;
         }
 
         QPair<int,int> RowToSource(int row) 
         {
-            int root = 0;
-            for (int r = 0; r < instance->sourceModel()->rowCount(); r++) 
+            auto root = 0;
+            for (auto r = 0; r < instance->sourceModel()->rowCount(); r++) 
             {
                 root = r;
-                int rows_in_root = SourceRootToCount(r);
-                if (row >= rows_in_root)
-                    row -= rows_in_root;
+                const auto rowsInRoot = SourceRootToCount(r);
+                if (row >= rowsInRoot)
+                    row -= rowsInRoot;
                 else break;
             }
             
@@ -83,7 +85,7 @@ namespace CtqTool
 
     CtqProxyModel::~CtqProxyModel() = default;
 
-    void CtqProxyModel::setSourceModel(QAbstractItemModel * m)
+    void CtqProxyModel::setSourceModel(QAbstractItemModel* m)
     {
         if (sourceModel())
         {
@@ -137,11 +139,11 @@ namespace CtqTool
             return QModelIndex();
         }    
 
-        QPair<int, int> pos = impl->RowToSource(proxy.row());
-        int root_row = pos.first;
-        int row = pos.second;
+        const auto pos = impl->RowToSource(proxy.row());
+        const auto rootRow = pos.first;
+        const auto row = pos.second;
 
-        QModelIndex p = sourceModel()->index(root_row, proxy.column());
+        QModelIndex p = sourceModel()->index(rootRow, proxy.column());
         return sourceModel()->index(row, proxy.column(), p);
     }
 
@@ -162,10 +164,10 @@ namespace CtqTool
             return 0;
         }
 
-        int count = 0;
-        for (int root_row = 0; root_row< sourceModel()->rowCount(); root_row++)
+        auto count = 0;
+        for (auto root = 0; root < sourceModel()->rowCount(); root++)
         {
-            count += impl->SourceRootToCount(root_row);
+            count += impl->SourceRootToCount(root);
         } 
 
         return count;
@@ -187,8 +189,8 @@ namespace CtqTool
             return;
         }
 
-        int f = impl->RowFrom(p.row(), from);
-        int t = f + (from-to);
+        const auto f = impl->RowFrom(p.row(), from);
+        const auto t = f + (from - to);
         beginInsertRows(QModelIndex(), f, t);
     }
 
@@ -205,11 +207,12 @@ namespace CtqTool
     void CtqProxyModel::SourceRowsAboutToBeRemoved(QModelIndex p, int from, int to)
     {
         if (!p.isValid()) {
-            //remove root items
-            int f = impl->RowFrom(from,0);
-            int t = impl->RowFrom(to,0)+ impl->SourceRootToCount(to);
+            // remove root items
+            const auto f = impl->RowFrom(from,0);
+            const auto t = impl->RowFrom(to,0) + impl->SourceRootToCount(to);
 
-            if (f != t) {
+            if (f != t) 
+            {
                 beginRemoveRows(QModelIndex(), f, t-1);
                 impl->aboutToRemoveRoots = true;
             }
@@ -217,8 +220,8 @@ namespace CtqTool
             return;
         }
 
-        int f = impl->RowFrom(p.row(), from);
-        int t = f + (from-to);
+        const auto f = impl->RowFrom(p.row(), from);
+        const auto t = f + (from - to);
         beginRemoveRows(QModelIndex(), f, t);
     }
 
@@ -242,9 +245,9 @@ namespace CtqTool
 
     void CtqProxyModel::SourceDataChanged(QModelIndex tl, QModelIndex br)
     {
-        QModelIndex p_tl = mapFromSource(tl);
-        QModelIndex p_br = mapFromSource(br);
-        emit dataChanged(p_tl, p_br);
+        const auto p_tl = mapFromSource(tl);
+        const auto p_br = mapFromSource(br);
+        dataChanged(p_tl, p_br);
     }
 
     void CtqProxyModel::SourceModelReset()
