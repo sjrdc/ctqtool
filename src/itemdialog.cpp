@@ -74,16 +74,7 @@ namespace CtqTool
     void ItemDialog::OnListItemSelectionChanged()
     {
     }
-
-    void ItemDialog::AddEmptyFilter()
-    {
-    }
-
-    void ItemDialog::RemoveFilter()
-    {
-
-    }
-
+    
     void ItemDialog::SetPropertiesFromFilter(QModelIndex index)
     {
         if (index.row() >= 0/*  && index < filters->size() */)

@@ -40,7 +40,6 @@ namespace CtqTool
         virtual ~ItemDialog();
 
     private:
-        void AddEmptyFilter();
         void MakeConnections() const;
         void MakeLayout();
         void OnListItemSelectionChanged();
@@ -50,7 +49,6 @@ namespace CtqTool
         void OnActiveCheckBoxStateChanged(int state);
         void OnDownButtonClicked();
         void OnUpButtonClicked();
-        void RemoveFilter();
         void SetPropertiesFromFilter(QModelIndex index);
 
         static void SetButtonColor(QPushButton* b, const QColor& c);
