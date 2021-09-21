@@ -31,7 +31,7 @@ namespace CtqTool
         CtqProxyModel(int offset, QObject* parent = nullptr);
         virtual ~CtqProxyModel();
 
-        void setSourceModel(QAbstractItemModel *) override;
+        void setSourceModel(QAbstractItemModel*) override;
 
         QModelIndex mapFromSource(const QModelIndex&) const override;
         QModelIndex mapToSource(const QModelIndex&) const override;
@@ -43,11 +43,11 @@ namespace CtqTool
         int columnCount(const QModelIndex& p = QModelIndex()) const override;
 
     private slots:
-        void SourceRowsAboutToBeInserted(QModelIndex, int, int);
-        void SourceRowsAboutToBeRemoved(QModelIndex, int, int);
-        void SourceRowsInserted(QModelIndex, int, int);
-        void SourceRowsRemoved(QModelIndex, int, int);
-        void SourceDataChanged(QModelIndex, QModelIndex);
+        void SourceRowsAboutToBeInserted(const QModelIndex&, int, int);
+        void SourceRowsAboutToBeRemoved(const QModelIndex&, int, int);
+        void SourceRowsInserted(const QModelIndex&, int, int);
+        void SourceRowsRemoved(const QModelIndex&, int, int);
+        void SourceDataChanged(const QModelIndex&, const QModelIndex&);
         void SourceModelReset();
 
     private:

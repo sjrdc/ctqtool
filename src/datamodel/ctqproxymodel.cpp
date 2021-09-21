@@ -89,40 +89,40 @@ namespace CtqTool
     {
         if (sourceModel())
         {
-            disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted, this, &CtqProxyModel::SourceRowsAboutToBeInserted);
-            disconnect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &CtqProxyModel::SourceRowsInserted);
+            disconnect(sourceModel(),&QAbstractItemModel::rowsAboutToBeInserted, this,&CtqProxyModel::SourceRowsAboutToBeInserted);
+            disconnect(sourceModel(),&QAbstractItemModel::rowsInserted, this,&CtqProxyModel::SourceRowsInserted);
 
-            disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, &CtqProxyModel::SourceRowsAboutToBeRemoved);
-            disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &CtqProxyModel::SourceRowsRemoved);
+            disconnect(sourceModel(),&QAbstractItemModel::rowsAboutToBeRemoved, this,&CtqProxyModel::SourceRowsAboutToBeRemoved);
+            disconnect(sourceModel(),&QAbstractItemModel::rowsRemoved, this,&CtqProxyModel::SourceRowsRemoved);
 
-            disconnect(sourceModel(), &QAbstractItemModel::dataChanged, this, &CtqProxyModel::SourceDataChanged);
-            disconnect(sourceModel(), &QAbstractItemModel::modelReset, this, &CtqProxyModel::SourceModelReset);
+            disconnect(sourceModel(),&QAbstractItemModel::dataChanged, this,&CtqProxyModel::SourceDataChanged);
+            disconnect(sourceModel(),&QAbstractItemModel::modelReset, this,&CtqProxyModel::SourceModelReset);
 
-            disconnect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged, this, &CtqProxyModel::layoutAboutToBeChanged);
-            disconnect(sourceModel(), &QAbstractItemModel::layoutChanged, this ,&CtqProxyModel::layoutChanged);
+            disconnect(sourceModel(),&QAbstractItemModel::layoutAboutToBeChanged, this,&CtqProxyModel::layoutAboutToBeChanged);
+            disconnect(sourceModel(),&QAbstractItemModel::layoutChanged, this ,&CtqProxyModel::layoutChanged);
         }
 
         QAbstractProxyModel::setSourceModel(m);
 
         if (sourceModel()) 
         {
-            connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,this, &CtqProxyModel::SourceRowsAboutToBeInserted);
-            connect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &CtqProxyModel::SourceRowsInserted);
+            connect(sourceModel(),&QAbstractItemModel::rowsAboutToBeInserted,this,&CtqProxyModel::SourceRowsAboutToBeInserted);
+            connect(sourceModel(),&QAbstractItemModel::rowsInserted, this,&CtqProxyModel::SourceRowsInserted);
 
-            connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, &CtqProxyModel::SourceRowsAboutToBeRemoved);
-            connect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &CtqProxyModel::SourceRowsRemoved);
+            connect(sourceModel(),&QAbstractItemModel::rowsAboutToBeRemoved, this,&CtqProxyModel::SourceRowsAboutToBeRemoved);
+            connect(sourceModel(),&QAbstractItemModel::rowsRemoved, this,&CtqProxyModel::SourceRowsRemoved);
 
-            connect(sourceModel(), &QAbstractItemModel::dataChanged, this, &CtqProxyModel::SourceDataChanged);
-            connect(sourceModel(), &QAbstractItemModel::modelReset, this, &CtqProxyModel::SourceModelReset);
+            connect(sourceModel(),&QAbstractItemModel::dataChanged, this,&CtqProxyModel::SourceDataChanged);
+            connect(sourceModel(),&QAbstractItemModel::modelReset, this,&CtqProxyModel::SourceModelReset);
 
-            connect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged, this, &QAbstractItemModel::layoutAboutToBeChanged);
-            connect(sourceModel(), &QAbstractItemModel::layoutChanged, this, &QAbstractItemModel::layoutChanged);
+            connect(sourceModel(),&QAbstractItemModel::layoutAboutToBeChanged, this,&QAbstractItemModel::layoutAboutToBeChanged);
+            connect(sourceModel(),&QAbstractItemModel::layoutChanged, this,&QAbstractItemModel::layoutChanged);
         }
 
         revert();
     }
 
-    QModelIndex CtqProxyModel::mapFromSource(const QModelIndex & source) const
+    QModelIndex CtqProxyModel::mapFromSource(const QModelIndex& source) const
     {
         if (!sourceModel() || !source.parent().isValid())
         {
@@ -132,7 +132,7 @@ namespace CtqTool
         return index(impl->RowFrom(source.parent().row(), source.row()), source.column());
     }
 
-    QModelIndex CtqProxyModel::mapToSource(const QModelIndex & proxy) const
+    QModelIndex CtqProxyModel::mapToSource(const QModelIndex& proxy) const
     {
         if (!sourceModel())
         {
@@ -147,17 +147,17 @@ namespace CtqTool
         return sourceModel()->index(row, proxy.column(), p);
     }
 
-    QModelIndex	CtqProxyModel::parent(const QModelIndex &) const
+    QModelIndex	CtqProxyModel::parent(const QModelIndex&) const
     {
         return QModelIndex();
     }
 
-    QModelIndex CtqProxyModel::index(int row, int column, const QModelIndex &) const
+    QModelIndex CtqProxyModel::index(int row, int column, const QModelIndex&) const
     {
         return createIndex(row, column);
     }
 
-    int	CtqProxyModel::rowCount(const QModelIndex & p) const
+    int	CtqProxyModel::rowCount(const QModelIndex& p) const
     {
         if (p.isValid() || !sourceModel()) 
         {
@@ -182,7 +182,7 @@ namespace CtqTool
         return sourceModel()->columnCount(p);
     }
 
-    void CtqProxyModel::SourceRowsAboutToBeInserted(QModelIndex p, int from, int to)
+    void CtqProxyModel::SourceRowsAboutToBeInserted(const QModelIndex& p, int from, int to)
     {
         if (!p.isValid()) 
         {
@@ -194,7 +194,7 @@ namespace CtqTool
         beginInsertRows(QModelIndex(), f, t);
     }
 
-    void CtqProxyModel::SourceRowsInserted(QModelIndex p, int, int)
+    void CtqProxyModel::SourceRowsInserted(const QModelIndex& p, int, int)
     {
         impl->sourceRootsCounts.clear();
         if (!p.isValid())
@@ -204,12 +204,12 @@ namespace CtqTool
         endInsertRows();
     }
 
-    void CtqProxyModel::SourceRowsAboutToBeRemoved(QModelIndex p, int from, int to)
+    void CtqProxyModel::SourceRowsAboutToBeRemoved(const QModelIndex& p, int from, int to)
     {
         if (!p.isValid()) {
             // remove root items
-            const auto f = impl->RowFrom(from,0);
-            const auto t = impl->RowFrom(to,0) + impl->SourceRootToCount(to);
+            const auto f = impl->RowFrom(from, 0);
+            const auto t = impl->RowFrom(to, 0) + impl->SourceRootToCount(to);
 
             if (f != t) 
             {
@@ -225,7 +225,7 @@ namespace CtqTool
         beginRemoveRows(QModelIndex(), f, t);
     }
 
-    void CtqProxyModel::SourceRowsRemoved(QModelIndex p, int, int)
+    void CtqProxyModel::SourceRowsRemoved(const QModelIndex& p, int, int)
     {
         impl->sourceRootsCounts.clear();
 
@@ -243,7 +243,7 @@ namespace CtqTool
         endRemoveRows();
     }
 
-    void CtqProxyModel::SourceDataChanged(QModelIndex tl, QModelIndex br)
+    void CtqProxyModel::SourceDataChanged(const QModelIndex& tl, const QModelIndex& br)
     {
         const auto p_tl = mapFromSource(tl);
         const auto p_br = mapFromSource(br);
