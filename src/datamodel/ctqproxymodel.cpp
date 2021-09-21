@@ -87,46 +87,34 @@ namespace CtqTool
     {
         if (sourceModel())
         {
-            disconnect(sourceModel(), SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsAboutToBeInserted(QModelIndex, int, int)));
-            disconnect(sourceModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsInserted(QModelIndex, int, int)));
+            disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted, this, &CtqProxyModel::SourceRowsAboutToBeInserted);
+            disconnect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &CtqProxyModel::SourceRowsInserted);
 
-            disconnect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsAboutToBeRemoved(QModelIndex, int, int)));
-            disconnect(sourceModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsRemoved(QModelIndex, int, int)));
+            disconnect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, &CtqProxyModel::SourceRowsAboutToBeRemoved);
+            disconnect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &CtqProxyModel::SourceRowsRemoved);
 
-            disconnect(sourceModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
-                    this, SLOT(SourceDataChanged(QModelIndex,QModelIndex)));
-            disconnect(sourceModel(), SIGNAL(modelReset()), 
-                    this, SLOT(SourceModelReset()));
+            disconnect(sourceModel(), &QAbstractItemModel::dataChanged, this, &CtqProxyModel::SourceDataChanged);
+            disconnect(sourceModel(), &QAbstractItemModel::modelReset, this, &CtqProxyModel::SourceModelReset);
 
-            disconnect(sourceModel(), SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
-            disconnect(sourceModel(), SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+            disconnect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged, this, &CtqProxyModel::layoutAboutToBeChanged);
+            disconnect(sourceModel(), &QAbstractItemModel::layoutChanged, this ,&CtqProxyModel::layoutChanged);
         }
 
         QAbstractProxyModel::setSourceModel(m);
 
         if (sourceModel()) 
         {
-            connect(sourceModel(), SIGNAL(rowsAboutToBeInserted(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsAboutToBeInserted(QModelIndex, int, int)));
-            connect(sourceModel(), SIGNAL(rowsInserted(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsInserted(QModelIndex, int, int)));
+            connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeInserted,this, &CtqProxyModel::SourceRowsAboutToBeInserted);
+            connect(sourceModel(), &QAbstractItemModel::rowsInserted, this, &CtqProxyModel::SourceRowsInserted);
 
-            connect(sourceModel(), SIGNAL(rowsAboutToBeRemoved(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsAboutToBeRemoved(QModelIndex, int, int)));
-            connect(sourceModel(), SIGNAL(rowsRemoved(QModelIndex, int, int)), 
-                    this, SLOT(SourceRowsRemoved(QModelIndex, int, int)));
+            connect(sourceModel(), &QAbstractItemModel::rowsAboutToBeRemoved, this, &CtqProxyModel::SourceRowsAboutToBeRemoved);
+            connect(sourceModel(), &QAbstractItemModel::rowsRemoved, this, &CtqProxyModel::SourceRowsRemoved);
 
-            connect(sourceModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), 
-                    this, SLOT(SourceDataChanged(QModelIndex,QModelIndex)));
-            connect(sourceModel(), SIGNAL(modelReset()), 
-                    this, SLOT(SourceModelReset()));
+            connect(sourceModel(), &QAbstractItemModel::dataChanged, this, &CtqProxyModel::SourceDataChanged);
+            connect(sourceModel(), &QAbstractItemModel::modelReset, this, &CtqProxyModel::SourceModelReset);
 
-            connect(sourceModel(), SIGNAL(layoutAboutToBeChanged()), this, SIGNAL(layoutAboutToBeChanged()));
-            connect(sourceModel(), SIGNAL(layoutChanged()), this, SIGNAL(layoutChanged()));
+            connect(sourceModel(), &QAbstractItemModel::layoutAboutToBeChanged, this, &QAbstractItemModel::layoutAboutToBeChanged);
+            connect(sourceModel(), &QAbstractItemModel::layoutChanged, this, &QAbstractItemModel::layoutChanged);
         }
 
         revert();
@@ -183,13 +171,13 @@ namespace CtqTool
         return count;
     }
 
-    int	CtqProxyModel::columnCount(const QModelIndex & p) const
+    int	CtqProxyModel::columnCount(const QModelIndex& p) const
     {
         if (p.isValid() || !sourceModel()) 
         {
             return 0;
         }
-        return sourceModel()->columnCount();
+        return sourceModel()->columnCount(p);
     }
 
     void CtqProxyModel::SourceRowsAboutToBeInserted(QModelIndex p, int from, int to)

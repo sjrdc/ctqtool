@@ -19,7 +19,9 @@
 #pragma once
 
 #include <QAbstractProxyModel>
+
 #include <memory>
+
 namespace CtqTool
 {
     class CtqProxyModel : public QAbstractProxyModel 
@@ -29,16 +31,16 @@ namespace CtqTool
         CtqProxyModel(int offset, QObject* parent = nullptr);
         virtual ~CtqProxyModel();
 
-        virtual void setSourceModel(QAbstractItemModel *);
+        void setSourceModel(QAbstractItemModel *) override;
 
-        virtual QModelIndex mapFromSource(const QModelIndex &) const;
-        virtual QModelIndex mapToSource(const QModelIndex &) const;
+        QModelIndex mapFromSource(const QModelIndex&) const override;
+        QModelIndex mapToSource(const QModelIndex&) const override;
 
-        virtual QModelIndex	parent(const QModelIndex &) const;
-        virtual QModelIndex index(int, int, const QModelIndex & p = QModelIndex()) const;
+        QModelIndex parent(const QModelIndex&) const override;
+        QModelIndex index(int, int, const QModelIndex& p = QModelIndex()) const override;
         
-        virtual int	rowCount(const QModelIndex & p = QModelIndex()) const;
-        virtual int	columnCount(const QModelIndex & p = QModelIndex()) const;
+        int rowCount(const QModelIndex& p = QModelIndex()) const override;
+        int columnCount(const QModelIndex& p = QModelIndex()) const override;
 
     private slots:
         void SourceRowsAboutToBeInserted(QModelIndex, int, int);
