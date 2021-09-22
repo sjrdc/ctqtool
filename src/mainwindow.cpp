@@ -55,7 +55,7 @@ namespace CtqTool
 
         for (int column = 0; column < model->columnCount(); ++column)
             treeView->resizeColumnToContents(column);
-            
+        
         setCentralWidget(treeView);
         setAcceptDrops(true);
 
@@ -149,6 +149,10 @@ namespace CtqTool
         auto* open = MakeAction(tr("&Open..."), this, QKeySequence::Open);
         connect(open, &QAction::triggered, this, &MainWindow::Open);
         fileMenu->addAction(open);
+
+        auto* exportAction = MakeAction(tr("&Export..."), this, QKeySequence(Qt::CTRL + Qt::Key_E));
+        connect(exportAction, &QAction::triggered, this, &MainWindow::Open);
+        fileMenu->addAction(exportAction);
 
         auto* reloadAction = MakeAction(tr("&Reload"), this, QKeySequence(QKeySequence::Refresh));
         connect(reloadAction, &QAction::triggered, this, &MainWindow::OnReloadTriggered);
