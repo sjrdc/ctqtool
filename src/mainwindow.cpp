@@ -151,7 +151,7 @@ namespace CtqTool
         fileMenu->addAction(open);
 
         auto* exportAction = MakeAction(tr("&Export..."), this, QKeySequence(Qt::CTRL + Qt::Key_E));
-        connect(exportAction, &QAction::triggered, this, &MainWindow::Open);
+        connect(exportAction, &QAction::triggered, this, &MainWindow::Export);
         fileMenu->addAction(exportAction);
 
         auto* reloadAction = MakeAction(tr("&Reload"), this, QKeySequence(QKeySequence::Refresh));
@@ -197,6 +197,11 @@ namespace CtqTool
         {
             // todo implement
         }
+    }
+    
+    void MainWindow::Export()
+    {
+        
     }
 
     void MainWindow::LoadFile(const QString& filename)

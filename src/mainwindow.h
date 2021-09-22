@@ -36,8 +36,10 @@ namespace CtqTool
         void dragEnterEvent(QDragEnterEvent* event);
         void dropEvent(QDropEvent* event);
 
-    protected:
+    
+    private:
         void About();
+        void Export();
         virtual void keyPressEvent(QKeyEvent* e);
         void OnLogWidgetStatusChanged(QString message);
         void Open();
@@ -45,7 +47,6 @@ namespace CtqTool
         void OnReloadTriggered();
         void CopyLines();
 
-    private:
         void MakeMenus();
         void MakeHelpMenu();
         void MakeFileMenu();
