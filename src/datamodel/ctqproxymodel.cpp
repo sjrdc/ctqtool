@@ -100,36 +100,36 @@ namespace CtqTool
 
     void CtqProxyModel::setSourceModel(QAbstractItemModel* m)
     {
-        if (sourceModel())
+        if (const auto* model = sourceModel(); model != nullptr)
         {
-            disconnect(sourceModel(),&QAbstractItemModel::rowsAboutToBeInserted, this,&CtqProxyModel::SourceRowsAboutToBeInserted);
-            disconnect(sourceModel(),&QAbstractItemModel::rowsInserted, this,&CtqProxyModel::SourceRowsInserted);
+            disconnect(model, &QAbstractItemModel::rowsAboutToBeInserted, this, &CtqProxyModel::SourceRowsAboutToBeInserted);
+            disconnect(model, &QAbstractItemModel::rowsInserted, this, &CtqProxyModel::SourceRowsInserted);
 
-            disconnect(sourceModel(),&QAbstractItemModel::rowsAboutToBeRemoved, this,&CtqProxyModel::SourceRowsAboutToBeRemoved);
-            disconnect(sourceModel(),&QAbstractItemModel::rowsRemoved, this,&CtqProxyModel::SourceRowsRemoved);
+            disconnect(model, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CtqProxyModel::SourceRowsAboutToBeRemoved);
+            disconnect(model, &QAbstractItemModel::rowsRemoved, this, &CtqProxyModel::SourceRowsRemoved);
 
-            disconnect(sourceModel(),&QAbstractItemModel::dataChanged, this,&CtqProxyModel::SourceDataChanged);
-            disconnect(sourceModel(),&QAbstractItemModel::modelReset, this,&CtqProxyModel::SourceModelReset);
+            disconnect(model, &QAbstractItemModel::dataChanged, this, &CtqProxyModel::SourceDataChanged);
+            disconnect(model, &QAbstractItemModel::modelReset, this, &CtqProxyModel::SourceModelReset);
 
-            disconnect(sourceModel(),&QAbstractItemModel::layoutAboutToBeChanged, this,&CtqProxyModel::layoutAboutToBeChanged);
-            disconnect(sourceModel(),&QAbstractItemModel::layoutChanged, this ,&CtqProxyModel::layoutChanged);
+            disconnect(model, &QAbstractItemModel::layoutAboutToBeChanged, this, &CtqProxyModel::layoutAboutToBeChanged);
+            disconnect(model, &QAbstractItemModel::layoutChanged, this , &CtqProxyModel::layoutChanged);
         }
 
         QAbstractProxyModel::setSourceModel(m);
 
-        if (sourceModel()) 
+        if (const auto* model = sourceModel(); model != nullptr) 
         {
-            connect(sourceModel(),&QAbstractItemModel::rowsAboutToBeInserted,this,&CtqProxyModel::SourceRowsAboutToBeInserted);
-            connect(sourceModel(),&QAbstractItemModel::rowsInserted, this,&CtqProxyModel::SourceRowsInserted);
+            connect(model, &QAbstractItemModel::rowsAboutToBeInserted,this, &CtqProxyModel::SourceRowsAboutToBeInserted);
+            connect(model, &QAbstractItemModel::rowsInserted, this, &CtqProxyModel::SourceRowsInserted);
 
-            connect(sourceModel(),&QAbstractItemModel::rowsAboutToBeRemoved, this,&CtqProxyModel::SourceRowsAboutToBeRemoved);
-            connect(sourceModel(),&QAbstractItemModel::rowsRemoved, this,&CtqProxyModel::SourceRowsRemoved);
+            connect(model, &QAbstractItemModel::rowsAboutToBeRemoved, this, &CtqProxyModel::SourceRowsAboutToBeRemoved);
+            connect(model, &QAbstractItemModel::rowsRemoved, this, &CtqProxyModel::SourceRowsRemoved);
 
-            connect(sourceModel(),&QAbstractItemModel::dataChanged, this,&CtqProxyModel::SourceDataChanged);
-            connect(sourceModel(),&QAbstractItemModel::modelReset, this,&CtqProxyModel::SourceModelReset);
+            connect(model, &QAbstractItemModel::dataChanged, this, &CtqProxyModel::SourceDataChanged);
+            connect(model, &QAbstractItemModel::modelReset, this, &CtqProxyModel::SourceModelReset);
 
-            connect(sourceModel(),&QAbstractItemModel::layoutAboutToBeChanged, this,&QAbstractItemModel::layoutAboutToBeChanged);
-            connect(sourceModel(),&QAbstractItemModel::layoutChanged, this,&QAbstractItemModel::layoutChanged);
+            connect(model, &QAbstractItemModel::layoutAboutToBeChanged, this, &QAbstractItemModel::layoutAboutToBeChanged);
+            connect(model, &QAbstractItemModel::layoutChanged, this, &QAbstractItemModel::layoutChanged);
         }
 
         revert();
