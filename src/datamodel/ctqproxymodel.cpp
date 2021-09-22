@@ -38,8 +38,7 @@ namespace CtqTool
 
             if (!sourceRootsCounts.contains(row))
             {
-                sourceRootsCounts[row] = instance->sourceModel()->rowCount(
-                    instance->sourceModel()->index(row,0));
+                sourceRootsCounts[row] = instance->sourceModel()->rowCount(instance->sourceModel()->index(row, 0));
             }
 
             return sourceRootsCounts[row];
@@ -54,7 +53,7 @@ namespace CtqTool
             return row;
         }
 
-        QPair<int,int> RowToSource(int row) 
+        QPair<int, int> RowToSource(int row) 
         {
             auto root = 0;
             for (auto r = 0; r < instance->sourceModel()->rowCount(); r++) 
@@ -69,12 +68,26 @@ namespace CtqTool
             return qMakePair(root, row);
         }
 
-        QHash<int, int> sourceRootsCounts; 
-        bool aboutToRemoveRoots;
+        void Reset()
+        {
+            sourceRootsCounts.clear();   
+        }
+
+        void SetAboutToRemoveRoots(bool b)
+        {
+            aboutToRemoveRoots = b;
+        }
+
+        bool IsAboutToRemoveRoots() const
+        {
+            return aboutToRemoveRoots;
+        }
 
     private:
         CtqProxyModel* instance;
+        QHash<int, int> sourceRootsCounts; 
         int offset = 0;
+        bool aboutToRemoveRoots;
     };
 
     CtqProxyModel::CtqProxyModel(int offset, QObject* parent) : 
@@ -196,7 +209,7 @@ namespace CtqTool
 
     void CtqProxyModel::SourceRowsInserted(const QModelIndex& p, int, int)
     {
-        impl->sourceRootsCounts.clear();
+        impl->Reset();
         if (!p.isValid())
         {
             return;
@@ -206,7 +219,8 @@ namespace CtqTool
 
     void CtqProxyModel::SourceRowsAboutToBeRemoved(const QModelIndex& p, int from, int to)
     {
-        if (!p.isValid()) {
+        if (!p.isValid()) 
+        {
             // remove root items
             const auto f = impl->RowFrom(from, 0);
             const auto t = impl->RowFrom(to, 0) + impl->SourceRootToCount(to);
@@ -214,7 +228,7 @@ namespace CtqTool
             if (f != t) 
             {
                 beginRemoveRows(QModelIndex(), f, t-1);
-                impl->aboutToRemoveRoots = true;
+                impl->SetAboutToRemoveRoots(true);
             }
             
             return;
@@ -227,14 +241,14 @@ namespace CtqTool
 
     void CtqProxyModel::SourceRowsRemoved(const QModelIndex& p, int, int)
     {
-        impl->sourceRootsCounts.clear();
+        impl->Reset();
 
         if (!p.isValid()) 
         {
             //remove root items
-            if (impl->aboutToRemoveRoots) 
+            if (impl->IsAboutToRemoveRoots()) 
             {
-                impl->aboutToRemoveRoots = false;
+                impl->SetAboutToRemoveRoots(false);
                 endRemoveRows();
             }        
             return;
@@ -252,7 +266,7 @@ namespace CtqTool
 
     void CtqProxyModel::SourceModelReset()
     {
-        impl->sourceRootsCounts.clear();
+        impl->Reset();
         revert();
     }
 }
