@@ -18,52 +18,43 @@
 
 #pragma once
 
-#include <QMainWindow>
+#include <QWidget>
 #include "datamodel/ctqmodel.h"
 
 namespace CtqTool
 {
     class CtqTreeScene;
-    class CtqView;
-
-    class MainWindow : public QMainWindow
+    class TreeView;
+    class CtqModel;
+    class CtqProxyModel;
+    class CtqView : public QWidget
     {
         Q_OBJECT
 
     public:
-        MainWindow();
+        CtqView(QWidget* parent = nullptr);
+        ~CtqView();
+
         void LoadFile(const QString& filename);
-
-        void dragEnterEvent(QDragEnterEvent* event);
-        void dropEvent(QDropEvent* event);
-    
+        
+        void InsertChild();
+        void InsertExistingChild();
+        void InsertRow();
+        void InsertExistingRow();
+        void RemoveRow();
     private:
-        void About();
-        void Export();
-        virtual void keyPressEvent(QKeyEvent* e);
-        void OnLogWidgetStatusChanged(QString message);
-        void Open();
-        void OpenRecentFile();
-        void OnReloadTriggered();
-        void CopyLines();
-
-        void MakeMenus();
-        void MakeHelpMenu();
-        void MakeFileMenu();
-        void MakeEditMenu();
-        void MakeTabMenu();
-        void MakeViewMenu();
-        void MakeStatusBar();
 
         void SetCurrentFile(const QString& fileName);
         void ShowMarkupFilters();
         void UpdateRecentFileActions();
         static void SetClipBoard(const QString&);
+        void UpdateActions();
 
-        static constexpr int numberOfRecentFiles = 10;
 
-        QList<QAction*> recentFileActions;
         CtqTreeScene* scene;
-        CtqView* view;
+        TreeView* treeView1;
+        TreeView* treeView2;
+        std::unique_ptr<CtqModel> model;
+        std::unique_ptr<CtqProxyModel> proxyModel;
     };
 }

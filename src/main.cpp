@@ -22,14 +22,19 @@
 #include <QTextStream>
 #include <QtWidgets/QApplication>
 
+void setStyleSheet(QString location)
+{    
+    QFile f(location);
+    f.open(QFile::ReadOnly | QFile::Text);
+    QTextStream ts(&f);
+    qApp->setStyleSheet(ts.readAll());
+}
+
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
 
-    QFile f(":qdarkstyle/style.qss");
-    f.open(QFile::ReadOnly | QFile::Text);
-    QTextStream ts(&f);
-    qApp->setStyleSheet(ts.readAll());
+    setStyleSheet(":qdarkstyle/style.qss");
 
     CtqTool::MainWindow w;
     w.show();

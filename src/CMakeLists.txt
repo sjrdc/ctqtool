@@ -7,6 +7,8 @@ add_executable(ctqtool
     WIN32
     ctqtreescene.h
     ctqtreescene.cpp
+    ctqview.h
+    ctqview.cpp
     itemdialog.h
     itemdialog.cpp
     main.cpp
