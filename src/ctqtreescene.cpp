@@ -23,7 +23,6 @@
 #include "datamodel/ctq.h"
 
 #include <QGraphicsRectItem>
-#include <iostream>
 
 namespace CtqTool
 {

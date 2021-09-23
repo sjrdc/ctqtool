@@ -18,6 +18,29 @@
 
 #include "ctqproxymodel.h"
 
+#include <boost/bimap.hpp>
+#include <map>
+
+namespace
+{       
+    void buildIndex(QAbstractItemModel* source, QAbstractItemModel* proxy, int targetDepth, int currentDepth, int& row,
+        boost::bimap<int, std::pair<int, QModelIndex>>& idx, std::map<int, QModelIndex>& parents, const QModelIndex& sourceIdx = QModelIndex())
+    {
+        if (currentDepth == targetDepth)
+        {
+            idx.insert({row, {sourceIdx.row(), sourceIdx.parent()}});
+            row++;
+        }
+        else if (source->hasChildren(sourceIdx))
+        {
+            for (auto r = 0; r < source->rowCount(sourceIdx); ++r)
+            {
+                buildIndex(source, proxy, targetDepth, currentDepth + 1, row, idx, parents, source->index(r, 0, sourceIdx));
+            }
+        }
+    }     
+}
+
 namespace CtqTool
 {
     class CtqProxyModel::CtqProxyModelImpl 
@@ -29,48 +52,25 @@ namespace CtqTool
         {
         }         
 
-        int SourceRootToCount(int row) 
+        int SourceToProxy(QModelIndex srcIdx)
         {
-            if (!instance->sourceModel())
-            {
-                return 0;
-            }   
-
-            if (!sourceRootsCounts.contains(row))
-            {
-                sourceRootsCounts[row] = instance->sourceModel()->rowCount(instance->sourceModel()->index(row, 0));
-            }
-
-            return sourceRootsCounts[row];
+            return index.right.at(std::make_pair(srcIdx.row(), srcIdx.parent()));
         }
 
-        int RowFrom(int root, int row)
+        std::pair<int, QModelIndex> ProxyToSource(int proxyIdx)
         {
-            for (auto r = 0; r < root; r++)
-            {
-                row += SourceRootToCount(r);
-            }
-            return row;
-        }
-
-        QPair<int, int> RowToSource(int row) 
-        {
-            auto root = 0;
-            for (auto r = 0; r < instance->sourceModel()->rowCount(); r++) 
-            {
-                root = r;
-                const auto rowsInRoot = SourceRootToCount(r);
-                if (row >= rowsInRoot)
-                    row -= rowsInRoot;
-                else break;
-            }
-            
-            return qMakePair(root, row);
+            return index.left.at(proxyIdx);
         }
 
         void Reset()
         {
-            sourceRootsCounts.clear();   
+            index.clear();
+            parents.clear();
+            if (instance != nullptr && instance->sourceModel() != nullptr)
+            {
+                auto row = 0;
+                buildIndex(instance->sourceModel(), instance, offset, 0, row, index, parents);
+            }
         }
 
         void SetAboutToRemoveRoots(bool b)
@@ -83,11 +83,18 @@ namespace CtqTool
             return aboutToRemoveRoots;
         }
 
+        int RowCount() const
+        {
+            return index.size();
+        }
+
     private:
         CtqProxyModel* instance;
-        QHash<int, int> sourceRootsCounts; 
+        boost::bimap<int, std::pair<int, QModelIndex>> index; 
+        std::map<int, QModelIndex> parents;
         int offset = 0;
         bool aboutToRemoveRoots;
+
     };
 
     CtqProxyModel::CtqProxyModel(int offset, QObject* parent) : 
@@ -132,7 +139,7 @@ namespace CtqTool
             connect(model, &QAbstractItemModel::layoutChanged, this, &QAbstractItemModel::layoutChanged);
         }
 
-        revert();
+        SourceModelReset();
     }
 
     QModelIndex CtqProxyModel::mapFromSource(const QModelIndex& source) const
@@ -142,22 +149,17 @@ namespace CtqTool
             return QModelIndex();
         }
 
-        return index(impl->RowFrom(source.parent().row(), source.row()), source.column());
+        return index(impl->SourceToProxy(source), source.column());
     }
 
     QModelIndex CtqProxyModel::mapToSource(const QModelIndex& proxy) const
     {
-        if (!sourceModel())
+        if (!sourceModel() || !proxy.isValid())
         {
             return QModelIndex();
-        }    
-
-        const auto pos = impl->RowToSource(proxy.row());
-        const auto rootRow = pos.first;
-        const auto row = pos.second;
-
-        QModelIndex p = sourceModel()->index(rootRow, proxy.column());
-        return sourceModel()->index(row, proxy.column(), p);
+        }
+        auto p = impl->ProxyToSource(proxy.row());
+        return sourceModel()->index(p.first, proxy.column(), p.second);
     }
 
     QModelIndex	CtqProxyModel::parent(const QModelIndex&) const
@@ -176,14 +178,8 @@ namespace CtqTool
         {
             return 0;
         }
-
-        auto count = 0;
-        for (auto root = 0; root < sourceModel()->rowCount(); root++)
-        {
-            count += impl->SourceRootToCount(root);
-        } 
-
-        return count;
+        
+        return impl->RowCount();
     }
 
     int	CtqProxyModel::columnCount(const QModelIndex& p) const
@@ -202,9 +198,6 @@ namespace CtqTool
             return;
         }
 
-        const auto f = impl->RowFrom(p.row(), from);
-        const auto t = f + (from - to);
-        beginInsertRows(QModelIndex(), f, t);
     }
 
     void CtqProxyModel::SourceRowsInserted(const QModelIndex& p, int, int)
@@ -221,22 +214,10 @@ namespace CtqTool
     {
         if (!p.isValid()) 
         {
-            // remove root items
-            const auto f = impl->RowFrom(from, 0);
-            const auto t = impl->RowFrom(to, 0) + impl->SourceRootToCount(to);
-
-            if (f != t) 
-            {
-                beginRemoveRows(QModelIndex(), f, t-1);
-                impl->SetAboutToRemoveRoots(true);
-            }
             
             return;
         }
 
-        const auto f = impl->RowFrom(p.row(), from);
-        const auto t = f + (from - to);
-        beginRemoveRows(QModelIndex(), f, t);
     }
 
     void CtqProxyModel::SourceRowsRemoved(const QModelIndex& p, int, int)

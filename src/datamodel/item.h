@@ -65,7 +65,7 @@ namespace CtqTool
 
     private:
         std::vector<std::shared_ptr<TreeItem>> children;
-        std::shared_ptr<Item> data;
-        TreeItem* parentItem;
+        std::shared_ptr<Item> data = nullptr;
+        TreeItem* parentItem = nullptr;
     };
 }

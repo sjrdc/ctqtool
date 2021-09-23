@@ -4,8 +4,6 @@
 #include <QItemSelection>
 #include <QStringList>
 
-#include <iostream>
-
 namespace CtqTool
 {
  
@@ -34,8 +32,7 @@ namespace CtqTool
             return QVariant();
 
         TreeItem* item = static_cast<TreeItem*>(index.internalPointer());
-
-        return item->Data(index.column());
+        return (item != nullptr) ? item->Data(index.column()) : QVariant();
     }
     
     Qt::ItemFlags CtqModel::flags(const QModelIndex& index) const
@@ -96,7 +93,7 @@ namespace CtqTool
         else
             parentItem = static_cast<TreeItem*>(parent.internalPointer());
 
-        return parentItem->ChildCount();
+        return (parentItem != nullptr) ? parentItem->ChildCount() : 0;
     }
     
     void CtqModel::SetupModelData(const QStringList& lines, TreeItem& parent)
@@ -200,12 +197,12 @@ namespace CtqTool
 
     bool CtqModel::removeRows(int position, int rows, const QModelIndex &parent)
     {
-        TreeItem *parentItem = GetItem(parent);
+        auto* parentItem = GetItem(parent);
         if (!parentItem)
             return false;
 
         beginRemoveRows(parent, position, position + rows - 1);
-        const bool success = parentItem->RemoveChildren(position, rows);
+        const auto success = parentItem->RemoveChildren(position, rows);
         endRemoveRows();
 
         return success;

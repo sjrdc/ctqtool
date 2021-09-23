@@ -24,6 +24,7 @@
 #include "utilities.h"
 
 #include "datamodel/ctqmodel.h"
+#include "datamodel/ctqproxymodel.h"
 
 #include <QtWidgets>
 
@@ -49,9 +50,14 @@ namespace CtqTool
         file.open(QIODevice::ReadOnly);
         model = std::make_unique<CtqTool::CtqModel>(file.readAll());
         
+        auto* proxy = new CtqProxyModel(3, this);
+        proxy->setSourceModel(model.get());
+        proxy->rowCount();
+
         file.close();
         
-        treeView->setModel(model.get());
+        // treeView->setModel(model.get());
+        treeView->setModel(proxy);
 
         for (int column = 0; column < model->columnCount(); ++column)
             treeView->resizeColumnToContents(column);
@@ -135,7 +141,6 @@ namespace CtqTool
     void MainWindow::CopyLines()
     {
     }
-
     
     void MainWindow::MakeTabMenu()
     {
@@ -201,7 +206,6 @@ namespace CtqTool
     
     void MainWindow::Export()
     {
-        
     }
 
     void MainWindow::LoadFile(const QString& filename)
