@@ -17,7 +17,6 @@
  */
 
 #include "ctqproxymodel.h"
-#include <QDebug>
 #include <boost/bimap.hpp>
 #include <map>
 
@@ -54,11 +53,6 @@ namespace CtqTool
 
         int SourceToProxy(QModelIndex srcIdx)
         {
-            for (auto it = index.right.begin(); it != index.right.end(); ++it)
-            {
-                qDebug() << it->first << it->second;
-            }
-            qDebug() << "looking for " << srcIdx.row() << srcIdx.parent();
             if (auto it = index.right.find(std::make_pair(srcIdx.row(), srcIdx.parent())); 
                 it != index.right.end())
             {
@@ -224,7 +218,6 @@ namespace CtqTool
 
     void CtqProxyModel::SourceDataChanged(const QModelIndex& tl, const QModelIndex& br)
     {
-        qDebug() << tl << br ;
         const auto p_tl = mapFromSource(tl);
         const auto p_br = mapFromSource(br);
         dataChanged(p_tl, p_br);
