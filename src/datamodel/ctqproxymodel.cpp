@@ -17,7 +17,7 @@
  */
 
 #include "ctqproxymodel.h"
-
+#include <QDebug>
 #include <boost/bimap.hpp>
 #include <map>
 
@@ -54,7 +54,20 @@ namespace CtqTool
 
         int SourceToProxy(QModelIndex srcIdx)
         {
-            return index.right.at(std::make_pair(srcIdx.row(), srcIdx.parent()));
+            for (auto it = index.right.begin(); it != index.right.end(); ++it)
+            {
+                qDebug() << it->first << it->second;
+            }
+            qDebug() << "looking for " << srcIdx.row() << srcIdx.parent();
+            if (auto it = index.right.find(std::make_pair(srcIdx.row(), srcIdx.parent())); 
+                it != index.right.end())
+            {
+                return it->second;
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         std::pair<int, QModelIndex> ProxyToSource(int proxyIdx)
@@ -193,53 +206,25 @@ namespace CtqTool
 
     void CtqProxyModel::SourceRowsAboutToBeInserted(const QModelIndex& p, int from, int to)
     {
-        if (!p.isValid()) 
-        {
-            return;
-        }
-
     }
 
     void CtqProxyModel::SourceRowsInserted(const QModelIndex& p, int, int)
     {
-        impl->Reset();
-        if (!p.isValid())
-        {
-            return;
-        }
-        endInsertRows();
+        SourceModelReset();
     }
 
     void CtqProxyModel::SourceRowsAboutToBeRemoved(const QModelIndex& p, int from, int to)
     {
-        if (!p.isValid()) 
-        {
-            
-            return;
-        }
-
     }
 
     void CtqProxyModel::SourceRowsRemoved(const QModelIndex& p, int, int)
     {
-        impl->Reset();
-
-        if (!p.isValid()) 
-        {
-            //remove root items
-            if (impl->IsAboutToRemoveRoots()) 
-            {
-                impl->SetAboutToRemoveRoots(false);
-                endRemoveRows();
-            }        
-            return;
-        }
-
-        endRemoveRows();
+        SourceModelReset();
     }
 
     void CtqProxyModel::SourceDataChanged(const QModelIndex& tl, const QModelIndex& br)
     {
+        qDebug() << tl << br ;
         const auto p_tl = mapFromSource(tl);
         const auto p_br = mapFromSource(br);
         dataChanged(p_tl, p_br);
@@ -249,5 +234,6 @@ namespace CtqTool
     {
         impl->Reset();
         revert();
+        layoutChanged();
     }
 }

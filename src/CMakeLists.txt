@@ -3,7 +3,6 @@ add_subdirectory(datamodel)
 FILE(GLOB RESOURCES ../res/* ../qdarkstyle/style.*)
 
 add_executable(ctqtool
-
     WIN32
     ctqtreescene.h
     ctqtreescene.cpp
