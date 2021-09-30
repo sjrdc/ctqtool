@@ -27,6 +27,7 @@
 #include "datamodel/ctqproxymodel.h"
 
 #include <QFile>
+#include <QTabWidget>
 #include <QVBoxLayout>
 
 namespace CtqTool
@@ -35,30 +36,47 @@ namespace CtqTool
         QWidget(nullptr),
         scene(new CtqTreeScene(this)),
         treeView1(new TreeView(this)),
-        treeView2(new TreeView(this))
+        needsTree(new TreeView(this)),
+        driversTree(new TreeView(this)),
+        ctqsTree(new TreeView(this)),
+        tabs(new QTabWidget(this))
     {
         QFile file("default.txt");
         file.open(QIODevice::ReadOnly);
         model = std::make_unique<CtqTool::CtqModel>(file.readAll());
-        
-        proxyModel = std::make_unique<CtqProxyModel>(3, this);
-        proxyModel->setSourceModel(model.get());
+                
+        needsModel = std::make_unique<CtqProxyModel>(1, this);
+        needsModel->setSourceModel(model.get());
+        needsTree->setModel(needsModel.get());
 
+        driversModel = std::make_unique<CtqProxyModel>(2, this);
+        driversModel->setSourceModel(model.get());
+        driversTree->setModel(driversModel.get());
+        
         file.close();
         
         treeView1->setModel(model.get());
-        treeView2->setModel(proxyModel.get());
+
+        ctqsModel = std::make_unique<CtqProxyModel>(3, this);
+        ctqsModel->setSourceModel(model.get());
+        ctqsTree->setModel(ctqsModel.get());
 
         for (int column = 0; column < model->columnCount(); ++column)
         {
             treeView1->resizeColumnToContents(column);
-            treeView2->resizeColumnToContents(column);
+            needsTree->resizeColumnToContents(column);
+            driversTree->resizeColumnToContents(column);
+            ctqsTree->resizeColumnToContents(column);
         }
 
         auto* layout = new QVBoxLayout(this);
         layout->addWidget(treeView1);
-        layout->addWidget(treeView2);
+        layout->addWidget(tabs);
         setLayout(layout);
+
+        tabs->addTab(needsTree, "needs");
+        tabs->addTab(driversTree, "drivers");
+        tabs->addTab(ctqsTree, "CTQs");
     }
 
     CtqView::~CtqView() = default;

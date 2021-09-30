@@ -21,12 +21,15 @@
 #include <QWidget>
 #include "datamodel/ctqmodel.h"
 
+class QTabWidget;
+
 namespace CtqTool
 {
     class CtqTreeScene;
     class TreeView;
     class CtqModel;
     class CtqProxyModel;
+
     class CtqView : public QWidget
     {
         Q_OBJECT
@@ -51,10 +54,16 @@ namespace CtqTool
         void UpdateActions();
 
 
-        CtqTreeScene* scene;
-        TreeView* treeView1;
-        TreeView* treeView2;
+        CtqTreeScene* scene = nullptr;
+        TreeView* treeView1 = nullptr;
+        TreeView* needsTree = nullptr;
+        TreeView* driversTree = nullptr;
+        TreeView* ctqsTree = nullptr;
+        QTabWidget* tabs = nullptr;
+
         std::unique_ptr<CtqModel> model;
-        std::unique_ptr<CtqProxyModel> proxyModel;
+        std::unique_ptr<CtqProxyModel> driversModel;
+        std::unique_ptr<CtqProxyModel> needsModel;
+        std::unique_ptr<CtqProxyModel> ctqsModel;
     };
 }
