@@ -22,6 +22,7 @@
 #include "datamodel/ctqmodel.h"
 
 class QTabWidget;
+class QTableView;
 
 namespace CtqTool
 {
@@ -56,9 +57,9 @@ namespace CtqTool
 
         CtqTreeScene* scene = nullptr;
         TreeView* treeView1 = nullptr;
-        TreeView* needsTree = nullptr;
-        TreeView* driversTree = nullptr;
-        TreeView* ctqsTree = nullptr;
+        QTableView* needTable = nullptr;
+        QTableView* driverTable = nullptr;
+        QTableView* ctqTable = nullptr;
         QTabWidget* tabs = nullptr;
 
         std::unique_ptr<CtqModel> model;

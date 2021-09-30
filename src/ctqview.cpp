@@ -28,6 +28,7 @@
 
 #include <QFile>
 #include <QTabWidget>
+#include <QTableView>
 #include <QVBoxLayout>
 
 namespace CtqTool
@@ -36,9 +37,9 @@ namespace CtqTool
         QWidget(nullptr),
         scene(new CtqTreeScene(this)),
         treeView1(new TreeView(this)),
-        needsTree(new TreeView(this)),
-        driversTree(new TreeView(this)),
-        ctqsTree(new TreeView(this)),
+        needTable(new QTableView(this)),
+        driverTable(new QTableView(this)),
+        ctqTable(new QTableView(this)),
         tabs(new QTabWidget(this))
     {
         QFile file("default.txt");
@@ -47,11 +48,11 @@ namespace CtqTool
                 
         needsModel = std::make_unique<CtqProxyModel>(1, this);
         needsModel->setSourceModel(model.get());
-        needsTree->setModel(needsModel.get());
+        needTable->setModel(needsModel.get());
 
         driversModel = std::make_unique<CtqProxyModel>(2, this);
         driversModel->setSourceModel(model.get());
-        driversTree->setModel(driversModel.get());
+        driverTable->setModel(driversModel.get());
         
         file.close();
         
@@ -59,14 +60,14 @@ namespace CtqTool
 
         ctqsModel = std::make_unique<CtqProxyModel>(3, this);
         ctqsModel->setSourceModel(model.get());
-        ctqsTree->setModel(ctqsModel.get());
+        ctqTable->setModel(ctqsModel.get());
 
         for (int column = 0; column < model->columnCount(); ++column)
         {
             treeView1->resizeColumnToContents(column);
-            needsTree->resizeColumnToContents(column);
-            driversTree->resizeColumnToContents(column);
-            ctqsTree->resizeColumnToContents(column);
+            needTable->resizeColumnToContents(column);
+            driverTable->resizeColumnToContents(column);
+            ctqTable->resizeColumnToContents(column);
         }
 
         auto* layout = new QVBoxLayout(this);
@@ -74,9 +75,9 @@ namespace CtqTool
         layout->addWidget(tabs);
         setLayout(layout);
 
-        tabs->addTab(needsTree, "needs");
-        tabs->addTab(driversTree, "drivers");
-        tabs->addTab(ctqsTree, "CTQs");
+        tabs->addTab(needTable, "needs");
+        tabs->addTab(driverTable, "drivers");
+        tabs->addTab(ctqTable, "CTQs");
     }
 
     CtqView::~CtqView() = default;
