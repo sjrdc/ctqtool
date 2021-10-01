@@ -57,8 +57,8 @@ namespace CtqTool
         const std::shared_ptr<TreeItem>& GetChild(int row);
         int ChildCount() const;
         int ColumnCount() const;
-        QString Data(int column) const;
-        void SetData(int column, const QString&);
+        QVariant Data(int column) const;
+        void SetData(int column, const QVariant&);
         int Row() const;
         TreeItem* GetParent() const;
         TreeItem* GetParent();

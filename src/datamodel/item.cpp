@@ -83,22 +83,24 @@ namespace CtqTool
     
     int TreeItem::ColumnCount() const
     {
-        return 2;
+        return 3;
     }
     
-    QString TreeItem::Data(int column) const
+    QVariant TreeItem::Data(int column) const
     {
         if (column < 0 || column >= ColumnCount() || data == nullptr)
         {
-            return QString();
+            return QVariant();
         }
 
         if (column == 0)
             return data->GetText();
         else if (column == 1)
             return data->GetNote();
+        else if (column == 2)
+            return data->GetWeight();
         else
-            return QString();
+            return QVariant();
     }
 
     TreeItem* TreeItem::GetParent() const
@@ -125,17 +127,21 @@ namespace CtqTool
         return 0;
     }
 
-    void TreeItem::SetData(int col, const QString& d)
+    void TreeItem::SetData(int col, const QVariant& d)
     {
         if (data != nullptr)
         {
             if (col == 0)
             {
-                data->SetText(d);
+                data->SetText(d.toString());
             }
             else if (col == 1)
             {
-                data->SetNote(d);
+                data->SetNote(d.toString());
+            }
+            else if (col == 2)
+            {
+                data->SetWeight(d.toInt());
             }
         }
     }

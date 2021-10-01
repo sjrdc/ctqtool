@@ -56,7 +56,7 @@ namespace CtqTool
 
 
         CtqTreeScene* scene = nullptr;
-        TreeView* treeView1 = nullptr;
+        TreeView* tree = nullptr;
         QTableView* needTable = nullptr;
         QTableView* driverTable = nullptr;
         QTableView* ctqTable = nullptr;

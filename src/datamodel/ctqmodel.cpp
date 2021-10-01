@@ -38,7 +38,9 @@ namespace CtqTool
     QVariant CtqModel::data(const QModelIndex& index, int role) const
     {
         if (!index.isValid())
+        {
             return QVariant();
+        }
 
         if (role != Qt::DisplayRole && role != Qt::EditRole)
             return QVariant();
@@ -55,12 +57,23 @@ namespace CtqTool
         return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
     }
     
-    QVariant CtqModel::headerData(int section, Qt::Orientation orientation,
-                                int role) const
+    QVariant CtqModel::headerData(int section, Qt::Orientation orientation, int role) const
     {
         if (orientation == Qt::Horizontal && role == Qt::DisplayRole)
-            return rootItem->Data(section);
-
+        {
+            switch (section)
+            {
+            case 0:
+                return "Text";
+            case 1:
+                return "Note";
+            case 2:
+                return "Weight";
+            default:
+                return QVariant();
+            }
+        }
+        
         return QVariant();
     }
     

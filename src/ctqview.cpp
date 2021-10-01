@@ -36,7 +36,7 @@ namespace CtqTool
     CtqView::CtqView(QWidget* parent) :
         QWidget(nullptr),
         scene(new CtqTreeScene(this)),
-        treeView1(new TreeView(this)),
+        tree(new TreeView(this)),
         needTable(new QTableView(this)),
         driverTable(new QTableView(this)),
         ctqTable(new QTableView(this)),
@@ -56,7 +56,7 @@ namespace CtqTool
         
         file.close();
         
-        treeView1->setModel(model.get());
+        tree->setModel(model.get());
 
         ctqsModel = std::make_unique<CtqProxyModel>(3, this);
         ctqsModel->setSourceModel(model.get());
@@ -64,14 +64,14 @@ namespace CtqTool
 
         for (int column = 0; column < model->columnCount(); ++column)
         {
-            treeView1->resizeColumnToContents(column);
+            tree->resizeColumnToContents(column);
             needTable->resizeColumnToContents(column);
             driverTable->resizeColumnToContents(column);
             ctqTable->resizeColumnToContents(column);
         }
 
         auto* layout = new QVBoxLayout(this);
-        layout->addWidget(treeView1);
+        layout->addWidget(tree);
         layout->addWidget(tabs);
         setLayout(layout);
 
@@ -84,8 +84,8 @@ namespace CtqTool
 
     void CtqView::InsertRow()
     {
-        const auto index = treeView1->selectionModel()->currentIndex();
-        auto* model = treeView1->model();
+        const auto index = tree->selectionModel()->currentIndex();
+        auto* model = tree->model();
 
         if (!model->insertRow(index.row()+1, index.parent()))
             return;
@@ -101,8 +101,8 @@ namespace CtqTool
 
     void CtqView::InsertExistingRow()
     {
-        const auto index = treeView1->selectionModel()->currentIndex();
-        auto* model = treeView1->model();
+        const auto index = tree->selectionModel()->currentIndex();
+        auto* model = tree->model();
 
         if (!model->insertRow(index.row()+1, index.parent()))
             return;
@@ -118,16 +118,16 @@ namespace CtqTool
 
     void CtqView::RemoveRow()
     {
-        const auto index = treeView1->selectionModel()->currentIndex();
-        auto* model = treeView1->model();
+        const auto index = tree->selectionModel()->currentIndex();
+        auto* model = tree->model();
         if (model->removeRow(index.row(), index.parent()))
             UpdateActions();
     }
         
     void CtqView::InsertChild()
     {
-        const auto currentIndex = treeView1->selectionModel()->currentIndex();
-        auto *model = treeView1->model();
+        const auto currentIndex = tree->selectionModel()->currentIndex();
+        auto *model = tree->model();
 
         if (model->columnCount(currentIndex) == 0) 
         {
@@ -148,15 +148,15 @@ namespace CtqTool
             }
         }
 
-        treeView1->selectionModel()->setCurrentIndex(model->index(0, 0, currentIndex),
+        tree->selectionModel()->setCurrentIndex(model->index(0, 0, currentIndex),
             QItemSelectionModel::ClearAndSelect);
         UpdateActions();
     }
 
     void CtqView::InsertExistingChild()
     {
-        const auto index = treeView1->selectionModel()->currentIndex();
-        auto *model = treeView1->model();
+        const auto index = tree->selectionModel()->currentIndex();
+        auto *model = tree->model();
 
         if (model->columnCount(index) == 0) 
         {
@@ -177,18 +177,18 @@ namespace CtqTool
             }
         }
 
-        treeView1->selectionModel()->setCurrentIndex(model->index(0, 0, index),
+        tree->selectionModel()->setCurrentIndex(model->index(0, 0, index),
                                                 QItemSelectionModel::ClearAndSelect);
         UpdateActions();
     }
     
     void CtqView::UpdateActions()
     {
-        const auto hasSelection = !treeView1->selectionModel()->selection().isEmpty();
-        const auto hasCurrent = treeView1->selectionModel()->currentIndex().isValid();
+        const auto hasSelection = !tree->selectionModel()->selection().isEmpty();
+        const auto hasCurrent = tree->selectionModel()->currentIndex().isValid();
         if (hasCurrent) 
         {
-            treeView1->closePersistentEditor(treeView1->selectionModel()->currentIndex());
+            tree->closePersistentEditor(tree->selectionModel()->currentIndex());
         } 
     }
 }
