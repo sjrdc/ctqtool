@@ -26,10 +26,10 @@
 
 namespace CtqTool
 {
-    class Item
+    class ItemData
     {
     public:
-        Item(QString, QString);
+        ItemData(QString, QString);
         
         void SetWeight(unsigned short);
         unsigned short GetWeight() const;
@@ -49,7 +49,7 @@ namespace CtqTool
     class TreeItem
     {
     public:
-        explicit TreeItem(std::shared_ptr<Item> data, TreeItem* parentItem = nullptr);
+        explicit TreeItem(std::shared_ptr<ItemData> data, TreeItem* parentItem = nullptr);
 
         void Append(std::shared_ptr<TreeItem> child);
         bool InsertChildren(int position, int count, int columns);
@@ -65,7 +65,7 @@ namespace CtqTool
 
     private:
         std::vector<std::shared_ptr<TreeItem>> children;
-        std::shared_ptr<Item> data = nullptr;
+        std::shared_ptr<ItemData> data = nullptr;
         TreeItem* parentItem = nullptr;
     };
 }

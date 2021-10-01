@@ -26,7 +26,7 @@
 namespace CtqTool
 {
     class Driver;
-    class UserNeed : public Item
+    class UserNeed : public ItemData
     {
     public:
         void Add(std::shared_ptr<Driver>);

@@ -21,7 +21,7 @@ namespace CtqTool
 
     CtqModel::CtqModel(const QString& data, QObject* parent) :
         QAbstractItemModel(parent),
-        rootItem(std::make_unique<TreeItem>(std::make_shared<Item>("Title", "Note"), nullptr))
+        rootItem(std::make_unique<TreeItem>(std::make_shared<ItemData>("Title", "Note"), nullptr))
     {
         SetupModelData(data.split('\n'), *rootItem);
     }
@@ -174,7 +174,7 @@ namespace CtqTool
                 }
 
                 // Append a new item to the current parent's list of children.
-                parents.back()->Append(std::make_unique<TreeItem>(std::make_shared<Item>(columnData[0], columnData[1]), parents.back()));
+                parents.back()->Append(std::make_unique<TreeItem>(std::make_shared<ItemData>(columnData[0], columnData[1]), parents.back()));
             }
             ++number;
         }

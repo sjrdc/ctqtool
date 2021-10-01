@@ -20,43 +20,43 @@
 
 namespace CtqTool
 {
-    Item::Item(QString text, QString note) :
+    ItemData::ItemData(QString text, QString note) :
         text(text),
         note(note)
     {
     }
 
-    void Item::SetWeight(unsigned short w)
+    void ItemData::SetWeight(unsigned short w)
     {
         weight = w;
     }
 
-    unsigned short Item::GetWeight() const
+    unsigned short ItemData::GetWeight() const
     {
         return weight;
     }
 
-    void Item::SetText(QString t)
+    void ItemData::SetText(QString t)
     {
         text = t;
     }
 
-    QString Item::GetText() const
+    QString ItemData::GetText() const
     {
         return text;
     }
 
-    void Item::SetNote(QString t)
+    void ItemData::SetNote(QString t)
     {
         note = t;
     }
 
-    QString Item::GetNote() const
+    QString ItemData::GetNote() const
     {
        return note;
     }
 
-    TreeItem::TreeItem(std::shared_ptr<Item> data, TreeItem* parent) :
+    TreeItem::TreeItem(std::shared_ptr<ItemData> data, TreeItem* parent) :
         data(std::move(data)), 
         parentItem(parent)
     {
@@ -83,7 +83,8 @@ namespace CtqTool
     
     int TreeItem::ColumnCount() const
     {
-        return 3;
+        constexpr auto count = 3;
+        return count;
     }
     
     QVariant TreeItem::Data(int column) const
@@ -153,8 +154,7 @@ namespace CtqTool
 
         for (int row = 0; row < count; ++row) 
         {
-            std::vector<QString> data(columns);
-            auto item = std::make_shared<TreeItem>(std::make_shared<Item>(data[0], data[1]), this);
+            auto item = std::make_shared<TreeItem>(std::make_shared<ItemData>("[not set]", "[not set]"), this);
             children.insert(children.begin() + position, item);
         }
 

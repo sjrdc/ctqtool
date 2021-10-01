@@ -23,7 +23,7 @@
 
 namespace CtqTool
 {
-    class Ctq : public Item
+    class Ctq : public ItemData
     {
     public:
         Measurement& GetMeasurement();
