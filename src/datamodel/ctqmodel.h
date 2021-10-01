@@ -58,5 +58,6 @@ namespace CtqTool
         TreeItem* GetItem(const QModelIndex &index) const;
 
         std::unique_ptr<TreeItem> rootItem;
+        static constexpr int maxDepth = 3; // i.e. need, driver, ctq
     };
 }

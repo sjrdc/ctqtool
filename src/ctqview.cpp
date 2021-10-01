@@ -126,21 +126,21 @@ namespace CtqTool
         
     void CtqView::InsertChild()
     {
-        const auto index = treeView1->selectionModel()->currentIndex();
+        const auto currentIndex = treeView1->selectionModel()->currentIndex();
         auto *model = treeView1->model();
 
-        if (model->columnCount(index) == 0) 
+        if (model->columnCount(currentIndex) == 0) 
         {
-            if (!model->insertColumn(0, index))
+            if (!model->insertColumn(0, currentIndex))
                 return;
         }
 
-        if (!model->insertRow(0, index))
+        if (!model->insertRow(0, currentIndex))
             return;
 
-        for (int column = 0; column < model->columnCount(index); ++column) 
+        for (int column = 0; column < model->columnCount(currentIndex); ++column) 
         {
-            const auto child = model->index(0, column, index);
+            const auto child = model->index(0, column, currentIndex);
             model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
             if (!model->headerData(column, Qt::Horizontal).isValid())
             {
@@ -148,8 +148,8 @@ namespace CtqTool
             }
         }
 
-        treeView1->selectionModel()->setCurrentIndex(model->index(0, 0, index),
-                                                QItemSelectionModel::ClearAndSelect);
+        treeView1->selectionModel()->setCurrentIndex(model->index(0, 0, currentIndex),
+            QItemSelectionModel::ClearAndSelect);
         UpdateActions();
     }
 

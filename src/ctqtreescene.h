@@ -27,6 +27,6 @@ namespace CtqTool
     {
     public:
         CtqTreeScene(QObject* parent = nullptr);
-    void SetTree(const CtqTree&);
+        void SetTree(const CtqTree&);
     };
 }

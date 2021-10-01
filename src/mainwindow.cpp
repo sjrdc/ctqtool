@@ -297,5 +297,4 @@ namespace CtqTool
     void MainWindow::OnReloadTriggered()
     {
     }
-
 }

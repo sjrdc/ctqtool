@@ -6,7 +6,19 @@
 
 namespace CtqTool
 {
- 
+    size_t depth(const QModelIndex& idx)
+    {
+        auto parent = idx.parent();
+        size_t depth = 1; // starting from invalid root item
+        while (parent.isValid())
+        {
+            parent = parent.parent();
+            ++depth;
+        }
+
+        return depth;
+    }
+
     CtqModel::CtqModel(const QString& data, QObject* parent) :
         QAbstractItemModel(parent),
         rootItem(std::make_unique<TreeItem>(std::make_shared<Item>("Title", "Note"), nullptr))
@@ -182,9 +194,15 @@ namespace CtqTool
 
     bool CtqModel::insertRows(int position, int rows, const QModelIndex &parent)
     {
+        if (depth(parent) == maxDepth)
+        {
+            return false;
+        }
         auto* parentItem = GetItem(parent);
         if (!parentItem)
+        {
             return false;
+        }
 
         beginInsertRows(parent, position, position + rows - 1);
         const auto success = parentItem->InsertChildren(position,
