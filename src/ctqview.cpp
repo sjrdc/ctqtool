@@ -27,6 +27,7 @@
 #include "datamodel/ctqproxymodel.h"
 
 #include <QFile>
+#include <QSplitter>
 #include <QTabWidget>
 #include <QTableView>
 #include <QVBoxLayout>
@@ -70,14 +71,17 @@ namespace CtqTool
             ctqTable->resizeColumnToContents(column);
         }
 
-        auto* layout = new QVBoxLayout(this);
-        layout->addWidget(tree);
-        layout->addWidget(tabs);
-        setLayout(layout);
-
         tabs->addTab(needTable, "needs");
         tabs->addTab(driverTable, "drivers");
         tabs->addTab(ctqTable, "CTQs");
+
+        auto* splitter = new QSplitter(Qt::Vertical, this);
+        splitter->addWidget(tree);
+        splitter->addWidget(tabs);
+
+        auto* layout = new QVBoxLayout(this);
+        layout->addWidget(splitter);
+        setLayout(layout);
     }
 
     CtqView::~CtqView() = default;
