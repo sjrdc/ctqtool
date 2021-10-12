@@ -51,7 +51,6 @@ namespace CtqTool
         void MakeHelpMenu();
         void MakeFileMenu();
         void MakeEditMenu();
-        void MakeTabMenu();
         void MakeViewMenu();
         void MakeStatusBar();
 

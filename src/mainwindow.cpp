@@ -71,7 +71,6 @@ namespace CtqTool
     {
         MakeFileMenu();
         MakeEditMenu();
-        MakeTabMenu();
         MakeViewMenu();
         MakeHelpMenu();
     }
@@ -127,11 +126,6 @@ namespace CtqTool
     {
     }
     
-    void MainWindow::MakeTabMenu()
-    {
-        auto* tabMenu = menuBar()->addMenu(tr("&Tabs"));
-    }
-
     void MainWindow::MakeFileMenu()
     {
         auto* fileMenu = menuBar()->addMenu(tr("&File"));
