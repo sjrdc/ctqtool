@@ -60,6 +60,7 @@ namespace CtqTool
         int ColumnCount() const;
         QVariant Data(int column) const;
         void SetData(int column, const QVariant&);
+        void CloneDataFrom(const TreeItem&);
         int Row() const;
         TreeItem* GetParent() const;
         TreeItem* GetParent();

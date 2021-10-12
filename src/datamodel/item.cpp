@@ -173,4 +173,9 @@ namespace CtqTool
 
         return true;
     }
+
+    void TreeItem::CloneDataFrom(const TreeItem& item)
+    {
+        data = item.data;
+    }
 }

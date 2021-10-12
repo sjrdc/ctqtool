@@ -28,6 +28,7 @@ class QListWidget;
 class QLabel;
 class QLineEdit;
 class QListWidgetItem;
+class QListView;
 
 namespace CtqTool
 {
@@ -58,5 +59,28 @@ namespace CtqTool
         QDialogButtonBox* buttonBox = nullptr;
         QLineEdit* titleEdit = nullptr;
         QLineEdit* noteEdit = nullptr;
+    };
+    
+    class PickDialog : public QDialog
+    {
+        Q_OBJECT
+
+    public:
+        PickDialog(QAbstractItemModel*, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+        virtual ~PickDialog();
+
+        QModelIndex GetSelection() const;
+
+    private:
+        void MakeConnections() const;
+        void MakeLayout();
+        void OnListItemSelectionChanged();
+        void OnFilterWidgetNameTextChanged(const QString& s);
+        void SetPropertiesFromFilter(QModelIndex index);
+        
+        QAbstractItemModel* model = nullptr;
+        QListView* view;
+        QDialogButtonBox* buttonBox = nullptr;
+        QModelIndex selectedIndex;
     };
 }

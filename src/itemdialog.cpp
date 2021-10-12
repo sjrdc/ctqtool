@@ -17,6 +17,7 @@
  */
 
 #include "itemdialog.h"
+#include "datamodel/ctqproxymodel.h"
 
 #include <QAbstractItemModel>
 #include <QCheckBox>
@@ -24,6 +25,7 @@
 #include <QDialogButtonBox>
 #include <QLabel>
 #include <QLineEdit>
+#include <QListView>
 #include <QPushButton>
 #include <QVBoxLayout>
 
@@ -100,5 +102,36 @@ namespace CtqTool
     {
         const auto noteIndex = model->index(index.row(), 1, index.parent());
         model->setData(noteIndex, noteEdit->text()); 
+    }
+
+
+    PickDialog::PickDialog(QAbstractItemModel* m, QWidget* parent, Qt::WindowFlags flags) :
+        QDialog(parent, flags),
+        model(m),
+        buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel)),
+        view(new QListView(this))
+    {
+        this->setWindowTitle("Item properties");
+        view->setModel(model);
+        MakeLayout();
+        
+        connect(view, &QListView::clicked, [this](const auto& idx) { this->selectedIndex = idx; });
+        connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+        connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    }
+
+    PickDialog::~PickDialog() = default;
+
+    void PickDialog::MakeLayout()
+    {
+        auto* layout = new QVBoxLayout;
+        layout->addWidget(view);
+        layout->addWidget(buttonBox);
+        this->setLayout(layout);
+    }
+
+    QModelIndex PickDialog::GetSelection() const
+    {
+        return selectedIndex;
     }
 }

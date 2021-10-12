@@ -25,13 +25,29 @@
 
 #include "datamodel/ctqmodel.h"
 #include "datamodel/ctqproxymodel.h"
+#include "datamodel/item.h"
 
 #include <QFile>
 #include <QSplitter>
+#include <QListView>
 #include <QTabWidget>
 #include <QTableView>
 #include <QVBoxLayout>
 
+namespace
+{
+    auto getDepth(const QModelIndex& idx)
+    {
+        auto depth = 0;
+        auto q = idx;
+        while (q.parent().isValid())
+        {
+            q = q.parent();
+            depth++;
+        }
+        return depth;
+    }
+}
 namespace CtqTool
 {
     CtqView::CtqView(QWidget* parent) :
@@ -157,33 +173,66 @@ namespace CtqTool
         UpdateActions();
     }
 
+    int getDepth(const QModelIndex& idx)
+    {
+        auto depth = 1;
+        auto q = idx;
+        while (q.parent().isValid())
+        {
+            q = q.parent();
+            depth++;
+        }
+        return depth;
+    }
+
+    auto makeProxy(QAbstractItemModel* m, QModelIndex i)
+    {
+        auto* proxy = new CtqProxyModel(1 + getDepth(i));
+        proxy->setSourceModel(m);
+        return proxy;
+    }
+
+    auto getItemData(QAbstractItemModel* model, const QModelIndex& idx)
+    {
+        QVector<QMap<int, QVariant>> data;
+        data.reserve(model->columnCount());
+        for (int c = 0; c < model->columnCount(); ++c)
+        {
+            data.push_back(model->itemData(model->index(idx.row(), c, idx.parent())));
+        }
+        return data;
+    }
+    
     void CtqView::InsertExistingChild()
     {
         const auto index = tree->selectionModel()->currentIndex();
-        auto *model = tree->model();
+        auto* model = tree->model();
 
-        if (model->columnCount(index) == 0) 
+        auto* proxy = makeProxy(model, index);
+        auto dialog = PickDialog(proxy, this);
+        if (dialog.exec() == QDialog::Accepted)
         {
-            if (!model->insertColumn(0, index))
-                return;
-        }
+            const auto currentIndex = tree->selectionModel()->currentIndex();
+            const auto idx = proxy->mapToSource(dialog.GetSelection());
+            auto data = getItemData(model, proxy->mapToSource(dialog.GetSelection()));
 
-        if (!model->insertRow(0, index))
-            return;
-
-        for (int column = 0; column < model->columnCount(index); ++column) 
-        {
-            const auto child = model->index(0, column, index);
-            model->setData(child, QVariant(tr("[No data]")), Qt::EditRole);
-            if (!model->headerData(column, Qt::Horizontal).isValid())
+            if (model->columnCount(currentIndex) == 0) 
             {
-                model->setHeaderData(column, Qt::Horizontal, QVariant(tr("[No header]")), Qt::EditRole);
+                if (!model->insertColumn(0, currentIndex))
+                    return;
             }
-        }
 
-        tree->selectionModel()->setCurrentIndex(model->index(0, 0, index),
-                                                QItemSelectionModel::ClearAndSelect);
-        UpdateActions();
+            if (!model->insertRow(0, currentIndex))
+                return;
+    
+            const auto& existingItem = *static_cast<TreeItem*>(idx.internalPointer());
+            auto& child = *static_cast<TreeItem*>(model->index(0, 0, currentIndex).internalPointer());
+            child.CloneDataFrom(existingItem);
+            
+            tree->selectionModel()->setCurrentIndex(model->index(0, 0, currentIndex),
+                QItemSelectionModel::ClearAndSelect);
+            UpdateActions();
+        }
     }
     
     void CtqView::UpdateActions()
