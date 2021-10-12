@@ -35,7 +35,7 @@
 namespace CtqTool
 {
     CtqView::CtqView(QWidget* parent) :
-        QWidget(nullptr),
+        QWidget(parent),
         scene(new CtqTreeScene(this)),
         tree(new TreeView(this)),
         needTable(new QTableView(this)),

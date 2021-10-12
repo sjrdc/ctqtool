@@ -41,6 +41,7 @@ namespace CtqTool
         QString GetNote() const;
 
     private:
+        size_t id = 0;
         unsigned short weight = 0;
         QString text;
         QString note;

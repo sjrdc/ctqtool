@@ -24,6 +24,8 @@ namespace CtqTool
         text(text),
         note(note)
     {
+        static auto counter = 0u;
+        id = counter++;
     }
 
     void ItemData::SetWeight(unsigned short w)
