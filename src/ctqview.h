@@ -47,12 +47,10 @@ namespace CtqTool
         void InsertRow();
         void InsertExistingRow();
         void RemoveRow();
+        
     private:
 
         void SetCurrentFile(const QString& fileName);
-        void ShowMarkupFilters();
-        void UpdateRecentFileActions();
-        static void SetClipBoard(const QString&);
         void UpdateActions();
 
         CtqTreeScene* scene = nullptr;

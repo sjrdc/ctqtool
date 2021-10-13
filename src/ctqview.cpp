@@ -58,25 +58,20 @@ namespace CtqTool
         ctqTable(new QTableView(this)),
         tabs(new QTabWidget(this))
     {
-        QFile file("default.txt");
-        file.open(QIODevice::ReadOnly);
-        model = std::make_unique<CtqTool::CtqModel>(file.readAll());
+        model = std::make_unique<CtqTool::CtqModel>("");
                 
         needsModel = std::make_unique<CtqProxyModel>(1, this);
-        needsModel->setSourceModel(model.get());
         needTable->setModel(needsModel.get());
 
         driversModel = std::make_unique<CtqProxyModel>(2, this);
-        driversModel->setSourceModel(model.get());
         driverTable->setModel(driversModel.get());
-        
-        file.close();
-        
+         
         tree->setModel(model.get());
 
         ctqsModel = std::make_unique<CtqProxyModel>(3, this);
-        ctqsModel->setSourceModel(model.get());
         ctqTable->setModel(ctqsModel.get());
+
+        LoadFile("default.txt");
 
         for (int column = 0; column < model->columnCount(); ++column)
         {
@@ -244,5 +239,19 @@ namespace CtqTool
         {
             tree->closePersistentEditor(tree->selectionModel()->currentIndex());
         } 
+    }
+
+    void CtqView::LoadFile(const QString& filename)
+    {
+        QFile file(filename);
+        file.open(QIODevice::ReadOnly);
+
+        model = std::make_unique<CtqModel>(file.readAll());
+        tree->setModel(model.get());
+        needsModel->setSourceModel(model.get());
+        driversModel->setSourceModel(model.get());
+        ctqsModel->setSourceModel(model.get());
+
+        file.close();
     }
 }
