@@ -93,6 +93,8 @@ namespace CtqTool
         auto* splitter = new QSplitter(Qt::Vertical, this);
         splitter->addWidget(tree);
         splitter->addWidget(tabs);
+        splitter->setStretchFactor(0, 2);
+        splitter->setStretchFactor(1, 1);
 
         auto* layout = new QVBoxLayout(this);
         layout->addWidget(splitter);
