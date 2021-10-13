@@ -18,11 +18,12 @@
 
 #pragma once
 
-#include <QWidget>
 #include "datamodel/ctqmodel.h"
 
-class QTabWidget;
+#include <QWidget>
+
 class QTableView;
+class QTabWidget;
 
 namespace CtqTool
 {
@@ -53,7 +54,6 @@ namespace CtqTool
         void UpdateRecentFileActions();
         static void SetClipBoard(const QString&);
         void UpdateActions();
-
 
         CtqTreeScene* scene = nullptr;
         TreeView* tree = nullptr;

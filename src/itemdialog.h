@@ -22,45 +22,11 @@
 #include <QModelIndex>
 
 class QAbstractItemModel;
-class QCheckBox;
 class QDialogButtonBox;
-class QListWidget;
-class QLabel;
-class QLineEdit;
-class QListWidgetItem;
 class QListView;
 
 namespace CtqTool
-{
-    class ItemDialog : public QDialog
-    {
-        Q_OBJECT
-
-    public:
-        ItemDialog(QAbstractItemModel*, QModelIndex, QWidget* parent = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
-        virtual ~ItemDialog();
-
-    private:
-        void MakeConnections() const;
-        void MakeLayout();
-        void OnListItemSelectionChanged();
-        void OnFilterWidgetNameTextChanged(const QString& s);
-        void OnTitleEditTextChanged(const QString& s);
-        void OnNoteEditTextChanged(const QString& s);
-        void OnActiveCheckBoxStateChanged(int state);
-        void OnDownButtonClicked();
-        void OnUpButtonClicked();
-        void SetPropertiesFromFilter(QModelIndex index);
-
-        static void SetButtonColor(QPushButton* b, const QColor& c);
-        
-        QAbstractItemModel* model = nullptr;
-        QModelIndex index;
-        QDialogButtonBox* buttonBox = nullptr;
-        QLineEdit* titleEdit = nullptr;
-        QLineEdit* noteEdit = nullptr;
-    };
-    
+{    
     class PickDialog : public QDialog
     {
         Q_OBJECT

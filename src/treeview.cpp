@@ -18,23 +18,11 @@
 
 #include "treeview.h"
 
-#include "itemdialog.h"
-
 namespace CtqTool
 {
     TreeView::TreeView(QWidget* parent) :
         QTreeView(parent)
     {
         setUniformRowHeights(false);
-    }
-
-    void TreeView::mouseDoubleClickEvent(QMouseEvent *event)
-    {
-        const auto indices = selectionModel()->selectedIndexes();
-        if (indices.size() > 0) 
-        {
-            auto* dialog = new ItemDialog(model(), indices.at(0));
-            dialog->show();
-        }
     }
 }

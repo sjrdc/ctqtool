@@ -19,9 +19,9 @@
 #include "ctqview.h"
 
 #include "ctqtreescene.h"
-#include "itemdialog.h"
 #include "treeview.h"
 #include "utilities.h"
+#include "itemdialog.h"
 
 #include "datamodel/ctqmodel.h"
 #include "datamodel/ctqproxymodel.h"
@@ -29,7 +29,6 @@
 
 #include <QFile>
 #include <QSplitter>
-#include <QListView>
 #include <QTabWidget>
 #include <QTableView>
 #include <QVBoxLayout>

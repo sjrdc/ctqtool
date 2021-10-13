@@ -26,7 +26,5 @@ namespace CtqTool
     {
     public:
         TreeView(QWidget *parent = nullptr);
-    protected:
-        void mouseDoubleClickEvent(QMouseEvent *event) override;
     };
 }
