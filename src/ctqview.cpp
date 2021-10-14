@@ -57,9 +57,7 @@ namespace CtqTool
         driverTable(new QTableView(this)),
         ctqTable(new QTableView(this)),
         tabs(new QTabWidget(this))
-    {
-        model = std::make_unique<CtqTool::CtqModel>("");
-                
+    {                
         needsModel = std::make_unique<CtqProxyModel>(1, this);
         needTable->setModel(needsModel.get());
 

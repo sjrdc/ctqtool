@@ -62,8 +62,11 @@ namespace CtqTool
         void SetData(int column, const QVariant&);
         void CloneDataFrom(const TreeItem&);
         int Row() const;
-        TreeItem* GetParent() const;
+
+        TreeItem const* GetParent() const;
         TreeItem* GetParent();
+
+        void PropagateRank();
 
     private:
         std::vector<std::shared_ptr<TreeItem>> children;

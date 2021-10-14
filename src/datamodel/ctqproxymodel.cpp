@@ -95,6 +95,11 @@ namespace CtqTool
             return index.size();
         }
 
+        int GetOffset() const
+        {
+            return offset;
+        }
+
     private:
         CtqProxyModel* instance;
         boost::bimap<int, std::pair<int, QModelIndex>> index; 
@@ -228,5 +233,19 @@ namespace CtqTool
         impl->Reset();
         revert();
         layoutChanged();
+    }
+
+    Qt::ItemFlags CtqProxyModel::flags(const QModelIndex& index) const
+    {
+        Qt::ItemFlags flags;
+
+        if (!index.isValid())
+            flags = Qt::NoItemFlags;
+        else if (impl->GetOffset() == 0 && index.column() == 2)
+            flags = QAbstractProxyModel::flags(index);
+        else
+            flags = QAbstractProxyModel::flags(index) | Qt::ItemIsEditable;
+
+        return flags;
     }
 }

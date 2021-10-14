@@ -30,6 +30,7 @@ namespace CtqTool
         rootItem(std::make_unique<TreeItem>(std::make_shared<ItemData>("Title", "Note"), nullptr))
     {
         SetupModelData(data.split('\n'), *rootItem);
+        connect(this, &QAbstractItemModel::dataChanged, this, &CtqModel::OnDataChanged);
     }
 
     CtqModel::~CtqModel() = default;
@@ -249,5 +250,14 @@ namespace CtqTool
         endRemoveRows();
 
         return success;
+    }
+
+    void CtqModel::OnDataChanged(const QModelIndex& topLeft, const QModelIndex& bottomRight, const QVector<int>&)
+    {
+        if (topLeft.column() <= rankColumn && bottomRight.column() >= rankColumn)
+        {
+            auto* item = GetItem(bottomRight);
+            item->PropagateRank();
+        }
     }
 }

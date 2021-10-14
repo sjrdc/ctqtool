@@ -178,4 +178,15 @@ namespace CtqTool
     {
         data = item.data;
     }
+
+    void TreeItem::PropagateRank()
+    {
+        constexpr auto rankColumn = 2;
+        auto rank = Data(rankColumn);
+        for (auto& child : children)
+        {
+            child->SetData(rankColumn, rank);
+            child->PropagateRank();
+        }
+    }
 }

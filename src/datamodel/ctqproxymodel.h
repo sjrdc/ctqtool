@@ -38,11 +38,12 @@ namespace CtqTool
 
         QModelIndex parent(const QModelIndex&) const override;
         QModelIndex index(int, int, const QModelIndex& p = QModelIndex()) const override;
-        
+        Qt::ItemFlags flags(const QModelIndex& index) const override;
+
         int rowCount(const QModelIndex& p = QModelIndex()) const override;
         int columnCount(const QModelIndex& p = QModelIndex()) const override;
 
-    private slots:
+    private:
         void SourceRowsAboutToBeInserted(const QModelIndex&, int, int);
         void SourceRowsAboutToBeRemoved(const QModelIndex&, int, int);
         void SourceRowsInserted(const QModelIndex&, int, int);
@@ -50,7 +51,6 @@ namespace CtqTool
         void SourceDataChanged(const QModelIndex&, const QModelIndex&);
         void SourceModelReset();
 
-    private:
         class CtqProxyModelImpl;
         std::unique_ptr<CtqProxyModelImpl> impl;
     };

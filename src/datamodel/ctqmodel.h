@@ -43,11 +43,7 @@ namespace CtqTool
         int columnCount(const QModelIndex& parent = QModelIndex()) const override;
         bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
           
-       
-        /* bool removeColumns(int position, int columns,
-                       const QModelIndex &parent = QModelIndex()) override;
-        bool insertColumns(int position, int columns,
-                       const QModelIndex &parent = QModelIndex()) override;*/
+
         bool removeRows(int position, int rows,
                     const QModelIndex &parent = QModelIndex()) override; 
         bool insertRows(int position, int rows,
@@ -56,6 +52,8 @@ namespace CtqTool
     private:
         void SetupModelData(const QStringList& lines, TreeItem& parent);
         TreeItem* GetItem(const QModelIndex &index) const;
+
+        void OnDataChanged(const QModelIndex&, const QModelIndex&, const QVector<int>&);
 
         std::unique_ptr<TreeItem> rootItem;
         static constexpr int maxDepth = 3; // i.e. need, driver, ctq
