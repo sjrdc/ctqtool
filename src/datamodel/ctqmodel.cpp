@@ -4,6 +4,12 @@
 #include <QItemSelection>
 #include <QStringList>
 
+namespace
+{
+    constexpr auto textColumn = 0;
+    constexpr auto noteColumn = 1;
+    constexpr auto rankColumn = 2;
+}
 namespace CtqTool
 {
     size_t depth(const QModelIndex& idx)
@@ -51,10 +57,16 @@ namespace CtqTool
     
     Qt::ItemFlags CtqModel::flags(const QModelIndex& index) const
     {
-        if (!index.isValid())
-            return Qt::NoItemFlags;
+        Qt::ItemFlags flags;
 
-        return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+        if (!index.isValid())
+            flags = Qt::NoItemFlags;
+        else if (depth(index) == 2 && index.column() == rankColumn)
+            flags = QAbstractItemModel::flags(index);
+        else
+            flags = QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+
+        return flags;
     }
     
     QVariant CtqModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -63,12 +75,12 @@ namespace CtqTool
         {
             switch (section)
             {
-            case 0:
+            case textColumn:
                 return "Text";
-            case 1:
+            case noteColumn:
                 return "Note";
-            case 2:
-                return "Weight";
+            case rankColumn:
+                return "Rank";
             default:
                 return QVariant();
             }
