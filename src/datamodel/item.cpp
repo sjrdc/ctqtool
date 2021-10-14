@@ -28,16 +28,6 @@ namespace CtqTool
         id = counter++;
     }
 
-    void ItemData::SetRank(unsigned short w)
-    {
-        weight = w;
-    }
-
-    unsigned short ItemData::GetRank() const
-    {
-        return weight;
-    }
-
     void ItemData::SetText(QString t)
     {
         text = t;
@@ -101,7 +91,7 @@ namespace CtqTool
         else if (column == 1)
             return data->GetNote();
         else if (column == 2)
-            return data->GetRank();
+            return rank;
         else
             return QVariant();
     }
@@ -144,7 +134,7 @@ namespace CtqTool
             }
             else if (col == 2)
             {
-                data->SetRank(d.toInt());
+                rank = d.toInt();
             }
         }
     }
@@ -182,11 +172,20 @@ namespace CtqTool
     void TreeItem::PropagateRank()
     {
         constexpr auto rankColumn = 2;
-        auto rank = Data(rankColumn);
         for (auto& child : children)
         {
             child->SetData(rankColumn, rank);
             child->PropagateRank();
         }
+    }
+
+    void TreeItem::SetRank(unsigned short r)
+    {
+        rank = r;
+    }
+
+    unsigned short TreeItem::GetRank() const
+    {
+        return rank;
     }
 }

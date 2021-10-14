@@ -31,9 +31,6 @@ namespace CtqTool
     public:
         ItemData(QString, QString);
         
-        void SetRank(unsigned short);
-        unsigned short GetRank() const;
-
         void SetText(QString);
         QString GetText() const;
 
@@ -42,7 +39,6 @@ namespace CtqTool
 
     private:
         size_t id = 0;
-        unsigned short weight = 0;
         QString text;
         QString note;
     };
@@ -67,10 +63,13 @@ namespace CtqTool
         TreeItem* GetParent();
 
         void PropagateRank();
+        void SetRank(unsigned short);
+        unsigned short GetRank() const;
 
     private:
         std::vector<std::shared_ptr<TreeItem>> children;
         std::shared_ptr<ItemData> data = nullptr;
         TreeItem* parentItem = nullptr;
+        unsigned short rank = 0;
     };
 }
