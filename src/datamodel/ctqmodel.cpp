@@ -1,9 +1,11 @@
 #include "ctqmodel.h"
 #include "item.h"
 
+#include <QDebug>
 #include <QItemSelection>
 #include <QStringList>
 
+#include <iostream>
 namespace
 {
     constexpr auto textColumn = 0;

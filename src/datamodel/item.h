@@ -31,8 +31,8 @@ namespace CtqTool
     public:
         ItemData(QString, QString);
         
-        void SetWeight(unsigned short);
-        unsigned short GetWeight() const;
+        void SetRank(unsigned short);
+        unsigned short GetRank() const;
 
         void SetText(QString);
         QString GetText() const;

@@ -28,12 +28,12 @@ namespace CtqTool
         id = counter++;
     }
 
-    void ItemData::SetWeight(unsigned short w)
+    void ItemData::SetRank(unsigned short w)
     {
         weight = w;
     }
 
-    unsigned short ItemData::GetWeight() const
+    unsigned short ItemData::GetRank() const
     {
         return weight;
     }
@@ -101,12 +101,12 @@ namespace CtqTool
         else if (column == 1)
             return data->GetNote();
         else if (column == 2)
-            return data->GetWeight();
+            return data->GetRank();
         else
             return QVariant();
     }
 
-    TreeItem* TreeItem::GetParent() const
+    TreeItem const* TreeItem::GetParent() const
     {
         return parentItem;
     }
@@ -144,7 +144,7 @@ namespace CtqTool
             }
             else if (col == 2)
             {
-                data->SetWeight(d.toInt());
+                data->SetRank(d.toInt());
             }
         }
     }
