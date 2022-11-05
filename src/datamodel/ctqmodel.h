@@ -29,7 +29,7 @@ namespace CtqTool
     {
     Q_OBJECT
     public:
-        explicit CtqModel(const QString& data, QObject* parent = nullptr);
+        explicit CtqModel(QObject* parent = nullptr);
         ~CtqModel();
 
         QVariant data(const QModelIndex& index, int role) const override;
@@ -48,6 +48,8 @@ namespace CtqTool
                     const QModelIndex &parent = QModelIndex()) override; 
         bool insertRows(int position, int rows,
                     const QModelIndex &parent = QModelIndex()) override;
+        
+        void Reset(const QString& data);
         
     private:
         void SetupModelData(const QStringList& lines, TreeItem& parent);

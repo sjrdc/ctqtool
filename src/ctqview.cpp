@@ -47,6 +47,7 @@ namespace
         return depth;
     }
 }
+
 namespace CtqTool
 {
     CtqView::CtqView(QWidget* parent) :
@@ -69,8 +70,11 @@ namespace CtqTool
         ctqsModel = std::make_unique<CtqProxyModel>(3, this);
         ctqTable->setModel(ctqsModel.get());
 
-        LoadFile("default.txt");
-
+        model = std::make_unique<CtqModel>();
+        tree->setModel(model.get());
+        needsModel->setSourceModel(model.get());
+        driversModel->setSourceModel(model.get());
+        ctqsModel->setSourceModel(model.get());
         for (int column = 0; column < model->columnCount(); ++column)
         {
             tree->resizeColumnToContents(column);
@@ -239,17 +243,4 @@ namespace CtqTool
         } 
     }
 
-    void CtqView::LoadFile(const QString& filename)
-    {
-        QFile file(filename);
-        file.open(QIODevice::ReadOnly);
-
-        model = std::make_unique<CtqModel>(file.readAll());
-        tree->setModel(model.get());
-        needsModel->setSourceModel(model.get());
-        driversModel->setSourceModel(model.get());
-        ctqsModel->setSourceModel(model.get());
-
-        file.close();
-    }
 }

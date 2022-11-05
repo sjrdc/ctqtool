@@ -5,7 +5,6 @@
 #include <QItemSelection>
 #include <QStringList>
 
-#include <iostream>
 namespace
 {
     constexpr auto textColumn = 0;
@@ -27,15 +26,19 @@ namespace CtqTool
         return depth;
     }
 
-    CtqModel::CtqModel(const QString& data, QObject* parent) :
+    CtqModel::CtqModel(QObject* parent) :
         QAbstractItemModel(parent),
         rootItem(std::make_unique<TreeItem>(std::make_shared<ItemData>("Title", "Note"), nullptr))
     {
-        SetupModelData(data.split('\n'), *rootItem);
         connect(this, &QAbstractItemModel::dataChanged, this, &CtqModel::OnDataChanged);
     }
 
     CtqModel::~CtqModel() = default;
+
+    void CtqModel::Reset(const QString& data) 
+    {
+        SetupModelData(data.split('\n'), *rootItem);
+    }
 
     int CtqModel::columnCount(const QModelIndex& parent) const
     {

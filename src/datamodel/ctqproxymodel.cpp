@@ -19,6 +19,7 @@
 #include "ctqproxymodel.h"
 #include <boost/bimap.hpp>
 #include <map>
+#include <iostream>
 
 namespace
 {       
@@ -66,7 +67,14 @@ namespace CtqTool
 
         std::pair<int, QModelIndex> ProxyToSource(int proxyIdx)
         {
-            return index.left.at(proxyIdx);
+            try 
+            {
+                return index.left.at(proxyIdx);
+            }
+            catch (std::out_of_range&) // may happen in case the model is not populated
+            {
+                return {};
+            }
         }
 
         void Reset()
@@ -116,7 +124,6 @@ namespace CtqTool
     }
 
     CtqProxyModel::~CtqProxyModel() = default;
-
     void CtqProxyModel::setSourceModel(QAbstractItemModel* m)
     {
         if (const auto* model = sourceModel(); model != nullptr)
@@ -231,8 +238,11 @@ namespace CtqTool
     void CtqProxyModel::SourceModelReset()
     {
         impl->Reset();
-        revert();
-        layoutChanged();
+        if (rowCount() > 0)
+        {
+           revert();
+           layoutChanged();
+        }
     }
 
     Qt::ItemFlags CtqProxyModel::flags(const QModelIndex& index) const

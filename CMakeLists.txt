@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-
-project(ctqtool)
+project(ctqtool VERSION 0.1.0 LANGUAGES CXX)
 
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -31,7 +30,7 @@ else()
   message(ERROR "Failed to load boost")
 endif()
 
-find_package(Qt5Widgets REQUIRED)    
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets)    
 # Instruct CMake to Run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
