@@ -39,7 +39,8 @@ namespace CtqTool
     
     private:
         void About();
-        void Export();
+        void Save();
+        void SaveAs();
         virtual void keyPressEvent(QKeyEvent* e);
         void OnLogWidgetStatusChanged(QString message);
         void Open();

@@ -14,4 +14,4 @@ add_library(datamodel
   userneed.cpp
   )
 
-target_link_libraries(datamodel Qt5::Core)
+target_link_libraries(datamodel Qt6::Core)

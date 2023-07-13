@@ -79,12 +79,12 @@ namespace CtqTool
 
     QString ExtractMultiLineText(QStringList lines)
     {
-        if (lines.count() >= 2)
+        if (lines.size() >= 2)
         {
             auto prefix = CommonPrefix(lines[0], lines[1]);
             for (auto& line : lines)
             {
-                line = QString(line.mid(prefix.count(), -1));
+                line = QString(line.mid(prefix.size(), -1));
             }
         }
         QString text = lines.join(" ");

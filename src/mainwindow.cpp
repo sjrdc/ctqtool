@@ -93,19 +93,19 @@ namespace CtqTool
     {
         auto* editMenu = menuBar()->addMenu(tr("&Edit"));
 
-        auto* insertRowAction = MakeAction(tr("Insert row"), this, QKeySequence(Qt::CTRL + Qt::Key_I, Qt::Key_R));
+        auto* insertRowAction = MakeAction(tr("Insert row"), this, QKeySequence(Qt::CTRL | Qt::Key_I, QKeyCombination(Qt::Key_R)));
         connect(insertRowAction, &QAction::triggered, view, &CtqView::InsertRow);
         editMenu->addAction(insertRowAction);
 
-        auto* insertExistingRowAction = MakeAction(tr("Insert existing row"), this, QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I, Qt::Key_R));
+        auto* insertExistingRowAction = MakeAction(tr("Insert existing row"), this, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I, QKeyCombination(Qt::Key_R)));
         connect(insertExistingRowAction, &QAction::triggered, view, &CtqView::InsertExistingRow);
         editMenu->addAction(insertExistingRowAction);
 
-        auto* insertChildAction = MakeAction(tr("Insert child"), this, QKeySequence(Qt::CTRL + Qt::Key_I, Qt::Key_C));
+        auto* insertChildAction = MakeAction(tr("Insert child"), this, QKeySequence(Qt::CTRL | Qt::Key_I, QKeyCombination(Qt::Key_C)));
         connect(insertChildAction, &QAction::triggered, view, &CtqView::InsertChild);
         editMenu->addAction(insertChildAction);
 
-        auto* insertExistingChildAction = MakeAction(tr("Insert existing child"), this, QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I, Qt::Key_C));
+        auto* insertExistingChildAction = MakeAction(tr("Insert existing child"), this, QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I, QKeyCombination(Qt::Key_C)));
         connect(insertExistingChildAction, &QAction::triggered, view, &CtqView::InsertExistingChild);
         editMenu->addAction(insertExistingChildAction);
 
@@ -134,9 +134,13 @@ namespace CtqTool
         connect(open, &QAction::triggered, this, &MainWindow::Open);
         fileMenu->addAction(open);
 
-        auto* exportAction = MakeAction(tr("&Export..."), this, QKeySequence(Qt::CTRL + Qt::Key_E));
-        connect(exportAction, &QAction::triggered, this, &MainWindow::Export);
-        fileMenu->addAction(exportAction);
+        auto* saveAction = MakeAction(tr("&Save..."), this, QKeySequence::Save);
+        connect(saveAction, &QAction::triggered, this, &MainWindow::Save);
+        fileMenu->addAction(saveAction);
+        
+        auto* saveAsAction = MakeAction(tr("Save as..."), this, QKeySequence::SaveAs);
+        connect(saveAsAction, &QAction::triggered, this, &MainWindow::SaveAs);
+        fileMenu->addAction(saveAsAction);
 
         auto* reloadAction = MakeAction(tr("&Reload"), this, QKeySequence(QKeySequence::Refresh));
         connect(reloadAction, &QAction::triggered, this, &MainWindow::OnReloadTriggered);
@@ -183,7 +187,11 @@ namespace CtqTool
         }
     }
     
-    void MainWindow::Export()
+    void MainWindow::Save()
+    {
+    }
+
+    void MainWindow::SaveAs()
     {
     }
 

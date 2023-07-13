@@ -20,4 +20,4 @@ add_executable(ctqtool
     ${RESOURCES}
     )
 
-target_link_libraries(ctqtool datamodel Qt5::Widgets)
+target_link_libraries(ctqtool datamodel Qt6::Widgets)

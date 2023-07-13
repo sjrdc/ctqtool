@@ -30,7 +30,7 @@ else()
   message(ERROR "Failed to load boost")
 endif()
 
-find_package(Qt5 REQUIRED COMPONENTS Core Widgets)    
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)    
 # Instruct CMake to Run moc automatically when needed.
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
