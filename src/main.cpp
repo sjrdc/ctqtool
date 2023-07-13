@@ -22,12 +22,15 @@
 #include <QTextStream>
 #include <QtWidgets/QApplication>
 
-void setStyleSheet(QString location)
-{    
-    QFile f(location);
-    f.open(QFile::ReadOnly | QFile::Text);
-    QTextStream ts(&f);
-    qApp->setStyleSheet(ts.readAll());
+namespace
+{
+    void setStyleSheet(const QString& location)
+    {    
+	QFile f(location);
+	f.open(QFile::ReadOnly | QFile::Text);
+	QTextStream ts(&f);
+	qApp->setStyleSheet(ts.readAll());
+    }
 }
 
 int main(int argc, char* argv[])
