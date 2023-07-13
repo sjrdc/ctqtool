@@ -1,23 +1,7 @@
 add_subdirectory(datamodel)
+add_subdirectory(ui)
 
 FILE(GLOB RESOURCES ../res/* ../qdarkstyle/style.*)
 
-add_executable(ctqtool
-    WIN32
-    ctqtreescene.h
-    ctqtreescene.cpp
-    ctqview.h
-    ctqview.cpp
-    itemdialog.h
-    itemdialog.cpp
-    main.cpp
-    mainwindow.h
-    mainwindow.cpp
-    treeview.h
-    treeview.cpp
-    utilities.h
-    utilities.cpp
-    ${RESOURCES}
-    )
-
-target_link_libraries(ctqtool datamodel Qt6::Widgets)
+add_executable(ctqtool main.cpp ${RESOURCES})
+target_link_libraries(ctqtool ui)
